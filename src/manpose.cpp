@@ -11,6 +11,11 @@ manpose::manpose()
 
 manpose::~manpose()
 {
+
+	if (!bodypartindexmap.empty())
+	{
+		bodypartindexmap.clear();
+	}
 }
 
 void manpose::configKeyData()

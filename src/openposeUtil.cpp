@@ -233,16 +233,20 @@ openposeUtil::openposeUtil()
 openposeUtil::~openposeUtil()
 {
 	if (_manpose != NULL)
+	{
 		delete _manpose;
 
-	//if (outputVideo != NULL)
-	//{
+		logInfo("clean manpose");
+	}
+	if (outposeVideo.isOpened())
+	{
 	outposeVideo.release();
 	///delete outputVideo;
-   //}
+	logInfo("clean outposevideo");
+   }
 	stoppposewithexitsys();
 
-
+	SimLog::Instance().EndLog();
 } // openposeUtil destructor
 
 //处理线程的主功能函数
@@ -267,10 +271,10 @@ void openposeUtil::stopposeservice()
 	{
 
 	bsavePose = false;
-	sl::sleep_ms(1);
+	
 	outposeVideo.release();
 	 
-	
+	sl::sleep_ms(2);
 	}
 
 
@@ -1675,7 +1679,7 @@ std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::strin
 	cv::Mat img1, img2, img3, img4;
 
 
-	int i = 0;
+	
 	Json::Value jsonbodypose;
 
 	Resolution image_size;
@@ -1701,7 +1705,10 @@ std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::strin
 
 	//logInfo(nb_frames);
 	zed.setSVOPosition(0);
+	poseavicap.set(CAP_PROP_POS_FRAMES, 0);
 	int videoFramesNum = poseavicap.get(CAP_PROP_FRAME_COUNT);//获取视频帧数
+	hkcap.set(CAP_PROP_POS_FRAMES, 0);
+	int hkvideoframenum = hkcap.get(CAP_PROP_FRAME_COUNT);//获取视频帧数
 
 	//int framestep = nb_frames / videoFramesNum;
 
@@ -1711,22 +1718,66 @@ std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::strin
 	logInfo(zedimgnum);
 	logInfo(poseimgnum);
 	logInfo(videoFramesNum);
-	cout <<"pose frmaes is "<<videoFramesNum << endl;
+	
 	//logInfo(nb_frames);
 	//logInfo(framestep);
-	zedimgnum = 997;
-	poseimgnum = 1072;
-	hkimgnum = 276;
+	zedimgnum = zed.getSVONumberOfFrames();;
 
 
+	if (videoFramesNum == 0)
+	{
+		cout << "pose video frames count is 0" << endl;
+		logInfo("pose video frames count is 0");
+		return "";
+	}
+	else
+	poseimgnum = videoFramesNum;
+
+	if (hkvideoframenum == 0)
+	{
+		cout << "hai kang video frames count is 0" << endl;
+		logInfo("hai kang video frames count is 0");
+		return "";
+	}
+	else
+		hkimgnum = hkvideoframenum;
+	cout << "pose frmaes is " << poseimgnum << endl;
+	cout << "haikang frmaes is " << hkimgnum << endl;
+
+	//hkimgnum = 276;
+	double framestep =(double)zedimgnum / hkimgnum;
+
+	int hkidx = 0;
+	int poseidx = 0;
+
+	int hkvidx = 0;
+	cout << "framestep is " << framestep << endl;
 	while (poseavicap.grab())
 	{
-		if ((i % 4)==0)
+
+		//hkidx = (int)i * framestep;
+
+		//if ((i % framestep)==0)
+
+		
+		//cout << "hai kang vidx is " << hkidx << endl;
+		//cout << "pose videoidx is " << poseidx << endl;
+		hkvidx = (int)hkidx * framestep;
+
+		if(hkvidx ==poseidx)
 		{
+
 			hkcap.grab();
 			hkcap.retrieve(simg1);
+
+			hkidx++;
+
+
 		}
-		
+		cout << "hai kang idx is " << hkidx << endl;
+		cout << "pose videoidx is " << poseidx << endl;
+		cout << "hk vv videoidx is " << hkvidx << endl;
+
 
 		//svo_position = zed.getSVOPosition();
 		//zed.setSVOPosition(i * framestep);
@@ -1752,7 +1803,7 @@ std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::strin
 
 		//jsonbodypose = getJsonByIndex(jsonbodyposels,i);
 		//cout << posedata_dir + std::to_string(i) + ".json" << endl;
-		simg4 = fromjson(posedata_dir + std::to_string(i) + ".json");
+		simg4 = fromjson(posedata_dir + std::to_string(poseidx) + ".json");
 		//cout << "over from json" << endl;
 		//recalcposedatimg(jsonbodypose);
 		//cv::imshow("Test2", img2);
@@ -1778,7 +1829,7 @@ std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::strin
 		cout << "sleep 20ms" << endl;
 		//zedposedataimg.release();
 
-		i++;
+		poseidx++;
 	}
 	//logInfo("avi frame is ");
 	//logInfo(i);
@@ -1788,7 +1839,7 @@ std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::strin
 	poseavicap.release();
 	outmergeVideo.release();
 
-
+	destroyAllWindows();
 	poseimgnum = 0;
 	zedimgnum = 0;
 	hkimgnum = 0;
@@ -2066,6 +2117,9 @@ std::list<Angle> openposeUtil::fromjsonfile(std::string _json_file)
 	}
 	/*else
 		cout << "++over dsfsdfsdfsdfsddf" << endl;*/
+
+	
+
 	json_is.close();
 
 
@@ -3519,6 +3573,13 @@ void openposeUtil::startposeservice(std::string svo_files)
 }
 
 void openposeUtil::stoppposewithexitsys() {
+
+
+	if (quit == true)
+	{
+		logInfo("restop!!!!");
+		return;
+	}
 	quit = true;
 
 	cout << "start clean resource" << endl;
