@@ -1,5 +1,4 @@
-﻿
-#include "openposeUtil.h"
+﻿#include "openposeUtil.h"
 #include <windows.h>
 #include <string>
 //#include <QDebug>
@@ -178,8 +177,8 @@
 //构造函数，指定缓冲区，和图片宽度、高度
 openposeUtil::openposeUtil()
 {
-    // Initialize variables
-    
+	// Initialize variables
+
 
 
 	bsaveSvo = false;
@@ -199,18 +198,18 @@ openposeUtil::openposeUtil()
 
 
 	stdmerge_avi_File = "";
-   // qRegisterMetaType<vector<pair<float,float>>>("vector<pair<float,float>>");
+	// qRegisterMetaType<vector<pair<float,float>>>("vector<pair<float,float>>");
 
 
 
 
-	//outputVideo = NULL;
+	 //outputVideo = NULL;
 
-	
+
 
 
 	initDevice();
-  
+
 	maxframecount = 300;
 
 	jsonidx = 0;
@@ -218,6 +217,12 @@ openposeUtil::openposeUtil()
 
 	poseimgidx = 0;
 	isrootwrite = false;
+
+
+	poseimgnum=0;
+	zedimgnum=0;
+	hkimgnum=0;
+	jsonnum=0;
 
 	//zedposedataimg = new cv::Mat[10];
 	builder.settings_["emitUTF8"] = true;
@@ -236,7 +241,7 @@ openposeUtil::~openposeUtil()
 	///delete outputVideo;
    //}
 	stoppposewithexitsys();
-	
+
 
 } // openposeUtil destructor
 
@@ -246,26 +251,42 @@ openposeUtil::~openposeUtil()
 //停止处理线程
 void openposeUtil::stopposeservice()
 {
-//    stoppedMutex.lock();
+	//    stoppedMutex.lock();
+	if (quit == true)
+	{
+		cout << "re stoped!!" << endl;
+		return;
+	}
+	
 	quit = true;
 
 	cout << "start clean resource" << endl;
 	//viewer.exit();
+
+	if(bsavePose)
+	{
+
 	bsavePose = false;
+	sl::sleep_ms(1);
+	outposeVideo.release();
+	 
+	
+	}
 
-	
-	
-	saveposeavi_callback.join();
-	
 
-	openpose_callback.join();
+	//saveposeavi_callback.join();
+
+
+	//openpose_callback.join();
 	cout << "stop openpose callback" << endl;
 
 
+	
+	openpose_callback.join();
 
 	zed_callback.join();
 	//cout << "22233333333333" << endl;
-
+	
 
 	if (zed.isOpened())
 	{
@@ -276,34 +297,34 @@ void openposeUtil::stopposeservice()
 		cout << "zed not need close" << endl;
 
 
-	cout << "11155555555555555555555555" << endl;
+	//cout << "11155555555555555555555555" << endl;
 
 
 	//savemanpose();
-	
+
+
 
 	
-	outposeVideo.release();
 
 	//bsaveZed = false;
 	//outposeVideo.release();
 	//outzedVideo.release();
 	//delete outputVideo;
 	//outputVideo = NULL;
-	
+
 
 	logInfo("over all pose avi");
-	
 
 
-	cout << "fffffffffffffffffff" << endl;
+
+	//cout << "fffffffffffffffffff" << endl;
 
 	//savesvo_callback.join();
 	//saveposeavi_callback.join();
-	
+
 	//return this->getsvo_File();
 
-	
+
 	//logInfo("exit Processing Thread");
 
   //  stoppedMutex.unlock();
@@ -322,7 +343,7 @@ void openposeUtil::logInfo(std::string info)
 void openposeUtil::logInfo(int info)
 {
 	///QString ss = QString::number(info);
-	LDebug("number is :{}",info);
+	LDebug("number is :{}", info);
 }
 
 void openposeUtil::logInfo(float info)
@@ -356,7 +377,7 @@ void openposeUtil::logInfo(Angle angle)
 
 	std::string info;
 
-	info.append(angle.desc).append(":").append(floatTostring(angle.angle,5)).append(" x,y:").append(floatTostring(angle.x,5)).append(",").append(floatTostring(angle.y, 5)).append(" over");
+	info.append(angle.desc).append(":").append(floatTostring(angle.angle, 5)).append(" x,y:").append(floatTostring(angle.x, 5)).append(",").append(floatTostring(angle.y, 5)).append(" over");
 
 	LDebug(info);
 }
@@ -369,10 +390,10 @@ void openposeUtil::logInfo(char* info)
 
 void openposeUtil::logInfo(sl::float3 info)
 {
-   ///loginfo("sl")
+	///loginfo("sl")
 	string qinfo;
-	
-	qinfo.append("vector or point is ").append("x:").append(floatTostring(info.x,5)).append(" y:").append(floatTostring(info.y, 5)).append(" z:").append(floatTostring(info.z, 5)).append(" over");
+
+	qinfo.append("vector or point is ").append("x:").append(floatTostring(info.x, 5)).append(" y:").append(floatTostring(info.y, 5)).append(" z:").append(floatTostring(info.z, 5)).append(" over");
 
 	logInfo(qinfo);
 }
@@ -421,7 +442,7 @@ void openposeUtil::logInfo(int vidx[4])
 	string qinfo;
 	qinfo.append("body pose index each part is ").append(floatTostring(vidx[0], 5)).append("-").append(floatTostring(vidx[1], 5)).
 		append(":").append(floatTostring(vidx[2], 5)).append("-").append(floatTostring(vidx[3], 5)).append(" over");
-  
+
 	logInfo(qinfo);
 }
 
@@ -440,7 +461,7 @@ void openposeUtil::initLogParameter(int argc, char* arcgv[])
 	gflags::ParseCommandLineFlags(&argc, &arcgv, true);
 
 	//google::InitGoogleLogging(arcgv[0]);
-	
+
 	FLAGS_log_dir = ".";
 
 	*arcgv = arcgv[0];
@@ -450,7 +471,7 @@ void openposeUtil::initLogParameter(int argc, char* arcgv[])
 	//logInfo("一次初始化google logger");
 }
 
-void openposeUtil::drawText(cv::Mat* image,Angle angle, Body body)
+void openposeUtil::drawText(cv::Mat * image, Angle angle, Body body)
 {
 	//image->setTo(cv::Scalar(100, 0, 0));
 
@@ -458,7 +479,7 @@ void openposeUtil::drawText(cv::Mat* image,Angle angle, Body body)
 	std::string text = "";
 
 	//获取文本框的长宽
-	
+
 
 	//将文本框居中绘制
 	if (isnan(angle.angle))
@@ -466,22 +487,29 @@ void openposeUtil::drawText(cv::Mat* image,Angle angle, Body body)
 		return;
 	}
 
-	text = doubleTostring(angle.angle,8);
+	text = doubleTostring(angle.angle, 8);
 
 
-	
+
 
 
 	cv::Point origin;
 	origin.x = angle.x;
 	origin.y = angle.y;
-	int tlen = gettextlen( * image, text.data(), origin);
+	int tlen = gettextlen(*image, text.data(), origin);
 	if (body == BODY_LEFT)
 	{
 		origin.x = origin.x - tlen;
 	}
-	cvdrawText::putTextZH(*image, text.data(), origin, cv::Scalar(0, 255, 255), 12, "Arial", true, true);
 
+	try {
+		cvdrawText::putTextZH(*image, text.data(), origin, cv::Scalar(0, 255, 255), 12, "Arial", true, true);
+	}
+	catch (Exception ex)
+	{
+		logInfo(ex.what());
+		cout << ex.what() << endl;
+	}
 	//putTextZH(src, "你好，世界", Point(30, 30), Scalar(255, 255, 0), 20, "Arial", true, true);
 	//namedWindow("刘亦菲", WINDOW_AUTOSIZE);
 
@@ -490,13 +518,13 @@ void openposeUtil::drawText(cv::Mat* image,Angle angle, Body body)
 	//cv::imshow("image", image);
 	//cv::waitKey(0);
 
-	
+
 
 }
 
-void openposeUtil::drawText(cv::Mat* image, std::string _text,cv::Point origin)
+void openposeUtil::drawText(cv::Mat * image, std::string _text, cv::Point origin)
 {
-	
+
 	cvdrawText::putTextZH(*image, _text.data(), origin, cv::Scalar(255, 255, 255), 12, "Arial", true, true);
 }
 
@@ -519,7 +547,7 @@ void openposeUtil::initDevice()
 	bool quit = false;
 
 
-//	pptmainwindow = NULL;
+	//	pptmainwindow = NULL;
 	_manpose = new manpose();
 
 	//logInfo("start configkeydata");
@@ -587,7 +615,7 @@ void openposeUtil::startposeserviceonlinezed()
 	poseModel = op::flagsToPoseModel(std::string(FLAGS_model_pose).c_str());
 
 	//logInfo("fffffffffffffffffffffffffffffffffffffffffffffff");
-	
+
 	if (FLAGS_model_pose == "COCO") model_kp_number = 18;
 	else if (FLAGS_model_pose.find("MPI") != std::string::npos) model_kp_number = 15;
 	else if (FLAGS_model_pose == "BODY_25") model_kp_number = 25;
@@ -610,6 +638,183 @@ void openposeUtil::startposeserviceonlinezed()
 	//glutCloseFunc(clean);
 	//glutMainLoop();
 }
+void openposeUtil::startzedopenpose()
+{
+
+	quit = false;
+	zed_callback = std::thread(&openposeUtil::runzedopenpose, this);
+}
+void openposeUtil::runzedopenpose()
+{
+	sl::RuntimeParameters rt;
+	rt.enable_depth = 1;
+	rt.measure3D_reference_frame = sl::REFERENCE_FRAME::WORLD;
+
+	sl::Mat img_buffer, depth_img_buffer, depth_buffer, depth_buffer2;
+	op::Array<float> outputArray, outputArray2;
+	cv::Mat inputImage, depthImage, inputImageRGBA, outputImage;
+
+
+
+
+
+	// ---- OPENPOSE INIT (io data + renderer) ----
+	op::ScaleAndSizeExtractor scaleAndSizeExtractor(netInputSize, outputSize, FLAGS_scale_number, FLAGS_scale_gap);
+	op::CvMatToOpInput cvMatToOpInput;
+	op::CvMatToOpOutput cvMatToOpOutput;
+
+	op::PoseCpuRenderer poseRenderer{ poseModel, (float)FLAGS_render_threshold, !FLAGS_disable_blending, (float)FLAGS_alpha_pose };
+	op::OpOutputToCvMat opOutputToCvMat;
+	// Initialize resources on desired thread (in this case single thread, i.e. we init resources here)
+	poseRenderer.initializationOnThread();
+
+
+
+
+	// Init
+	sl::Resolution image_resolution(image_width, image_height);
+	imageSize = op::Point<int>{ image_width, image_height };
+	// Get desired scale sizes
+	std::vector<op::Point<int>> netInputSizes;
+	double scaleInputToOutput;
+	op::Point<int> outputResolution;
+	std::tie(scaleInputToNetInputs, netInputSizes, scaleInputToOutput, outputResolution) = scaleAndSizeExtractor.extract(imageSize);
+
+	
+
+	// Prepare new image size to retrieve half-resolution images
+	Resolution image_size;
+	int new_width, new_height;
+
+
+	image_size = zed.getCameraInformation().camera_resolution;
+
+	new_width = image_size.width / 1;
+	new_height = image_size.height / 1;
+
+	image_height = new_height;
+	image_width = new_width;
+
+	/*logInfo("------------width--------");
+	logInfo(new_width);
+
+	logInfo("------------width--------");
+	logInfo(new_height);*/
+
+
+
+	sl::Mat image_zed(new_width, new_height, MAT_TYPE::U8_C4);
+	image_ocv = slMat2cvMat(image_zed);
+	sl::Mat depth_image_zed(new_width, new_height, MAT_TYPE::U8_C4);
+	cv::Mat depth_image_ocv = slMat2cvMat(depth_img_buffer);
+	cv::Mat rimg, rrimg;
+	sl::Resolution new_image_size;
+	new_image_size.height = new_height;
+	new_image_size.width = new_width;
+	logInfo("zed frame is ");
+	logInfo(zed.getSVONumberOfFrames());
+	int zzz = zed.getSVONumberOfFrames();
+
+	cout << "zed frame is" << zzz << endl;
+
+	
+
+	while (!quit) {
+	
+		if (zed.grab() == ERROR_CODE::SUCCESS)
+		{
+
+			zed.retrieveImage(image_zed, VIEW::LEFT, MEM::CPU, new_image_size);
+
+			depth_buffer2 = depth_buffer;
+
+			zed.retrieveMeasure(depth_buffer, MEASURE::XYZRGBA, sl::MEM::CPU, new_image_size);
+
+			if (!image_ocv.empty())
+			{
+				cv::imshow("Image", image_ocv);
+				zedimgnum++;
+				cv::cvtColor(image_ocv, inputImage, cv::COLOR_RGBA2RGB);
+				if (FLAGS_depth_display)
+					zed.retrieveImage(depth_img_buffer, VIEW::DEPTH, sl::MEM::CPU, new_image_size);
+
+				if (FLAGS_opencv_display)
+				{
+					outputArray2 = outputArray;
+					outputArray = cvMatToOpOutput.createArray(op::Matrix(&inputImage), scaleInputToOutput, outputResolution);
+				}
+				netInputArray = cvMatToOpInput.createArray(op::Matrix(&inputImage), scaleInputToNetInputs, netInputSizes);
+				cout << "-----------------";
+			
+
+				calcmanpose(poseKeypoints, depth_buffer2);
+				if (FLAGS_opencv_display) {
+					if (!outputArray2.empty())
+						poseRenderer.renderPose(outputArray2, poseKeypoints, scaleInputToOutput);
+
+					// OpenPose output format to cv::Mat
+					if (!outputArray2.empty())
+						outputImage = *((cv::Mat*)opOutputToCvMat.formatToCvMat(outputArray2).getCvMat());
+
+					// Show results
+					if (!outputArray2.empty())
+					{
+
+						drawText(&outputImage, _manpose->getang_plane1_left_right(), BODY_LEFT);
+						drawText(&outputImage, _manpose->getang_plane2_before_after());
+						drawText(&outputImage, _manpose->getang_midhip_plane_normal());
+						drawText(&outputImage, _manpose->getang_hipknee_midhip(BODY_LEFT), BODY_LEFT);
+						drawText(&outputImage, _manpose->getang_hipknee_midhip(BODY_RIGHT));
+
+						drawText(&outputImage, _manpose->getang_hipknee_plane_normal(BODY_LEFT), BODY_LEFT);
+						drawText(&outputImage, _manpose->getang_hipknee_plane_normal(BODY_RIGHT));
+
+						drawText(&outputImage, _manpose->getang_kneeankle_plane_normal(BODY_LEFT), BODY_LEFT);
+						drawText(&outputImage, _manpose->getang_kneeankle_plane_normal(BODY_RIGHT));
+
+
+						drawText(&outputImage, _manpose->getang_kneeankle_hipknee(BODY_LEFT), BODY_LEFT);
+						drawText(&outputImage, _manpose->getang_kneeankle_hipknee(BODY_RIGHT));
+
+						drawText(&outputImage, _manpose->getang_anklebigtoe_kneeankle(BODY_LEFT), BODY_LEFT);
+						drawText(&outputImage, _manpose->getang_anklebigtoe_kneeankle(BODY_RIGHT));
+
+
+						drawText(&outputImage, _manpose->getang_anklebigtoe_plane_normal(BODY_LEFT), BODY_LEFT);
+						drawText(&outputImage, _manpose->getang_anklebigtoe_plane_normal(BODY_RIGHT));
+						
+
+						
+						if (bsavePose) {
+							cv::imshow("pose", outputImage);
+							addmanpose();
+							jsonidx++;
+							poseimgnum++;
+						
+							cv::resize(outputImage, rimg, cv::Size(simage_width, simage_height));
+							outposeVideo.write(rimg);						
+						}
+
+					}
+					//  cv::put
+					if (FLAGS_depth_display)
+						cv::imshow("Depth", depth_image_ocv);
+
+					//cv::waitKey(10);
+					
+				}
+			}
+		
+		  destroyAllWindows();
+		  cout << "pose num is " << poseimgnum << endl;
+		  cout << "zed num is " << zedimgnum << endl;
+		}
+	}
+
+	
+
+
+}
 void openposeUtil::startgetposeavidata()
 {
 	if (bsavePose)
@@ -628,14 +833,14 @@ void openposeUtil::startgetposeavidata()
 
 
 
-	
+
 
 	quit = false;
 	savesvo_callback = std::thread(&openposeUtil::savesvo, this);
 
 	//bool retval = saveSvo(svofile);
 
-	
+
 
 
 }
@@ -658,7 +863,7 @@ void openposeUtil::endgetposeavidata()
 	reinit();
 
 	logInfo("over all pose avi");
-	
+
 	if (bsaveSvo == false)
 		return;
 
@@ -685,7 +890,7 @@ void openposeUtil::endgetposeavidata()
 
 
 }
-std::string openposeUtil::UTF8ToGB(const std::string& str)
+std::string openposeUtil::UTF8ToGB(const std::string & str)
 {
 
 	string result;
@@ -704,9 +909,9 @@ std::string openposeUtil::UTF8ToGB(const std::string& str)
 	delete[]strSrc;
 	delete[]szRes;
 	return result;
-	
+
 }
-std::wstring openposeUtil::s2ws(const std::string& s)
+std::wstring openposeUtil::s2ws(const std::string & s)
 {
 	int len;
 	int slength = (int)s.length() + 1;
@@ -717,7 +922,7 @@ std::wstring openposeUtil::s2ws(const std::string& s)
 	delete[] buf;
 	return r;
 }
-std::string openposeUtil::ws2s(const std::wstring& s)
+std::string openposeUtil::ws2s(const std::wstring & s)
 {
 	int len;
 	int slength = (int)s.length() + 1;
@@ -728,7 +933,7 @@ std::string openposeUtil::ws2s(const std::wstring& s)
 	delete[] buf;
 	return r;
 }
-std::string openposeUtil::replace_utf8_escape_sequences(const std::string& str)
+std::string openposeUtil::replace_utf8_escape_sequences(const std::string & str)
 {
 
 	std::string result;
@@ -769,14 +974,14 @@ std::string openposeUtil::getzedcurimg()
 {
 
 	//cout << "-----------------111111111111----" << endl;
-	std::string tmpimg = dirutil::GetCurrentWorkingDir() +"\\" + getNowTime() + ".bmp";
+	std::string tmpimg = dirutil::GetCurrentWorkingDir() + "\\" + getNowTime() + ".bmp";
 	logInfo(tmpimg);
 	//cout << tmpimg << endl;
 	//data_out_mtx.lock();
-	
-	
+
+
 	cv::imwrite(tmpimg, image_ocv);
-	
+
 
 
 	return tmpimg;
@@ -787,7 +992,7 @@ void openposeUtil::startRecordPose()
 	if (bsavePose)
 		return;
 
-	
+
 
 	savezedavi_callback = std::thread(&openposeUtil::saveposeavi, this);
 }
@@ -817,7 +1022,7 @@ bool openposeUtil::startSavezedSvo()
 	savesvo_callback = std::thread(&openposeUtil::savesvo, this);
 
 	//bool retval = saveSvo(svofile);
-	
+
 	return true;
 }
 bool openposeUtil::savesvo()
@@ -900,7 +1105,7 @@ bool openposeUtil::saveposeavi()
 
 	logInfo(image_height);
 	logInfo(image_width);
-	outposeVideo.open(getpose_avi_File(), VideoWriter::fourcc('F', 'M', 'P', '4'), 10, cv::Size(image_width,image_height ), true);
+	outposeVideo.open(getpose_avi_File(), VideoWriter::fourcc('F', 'M', 'P', '4'), 10, cv::Size(image_width, image_height), true);
 	//outzedVideo.open(getzed_avi_File(), VideoWriter::fourcc('F', 'M', 'P', '4'), 10, cv::Size(image_width, image_height), true);
 
 	if (!outposeVideo.isOpened())
@@ -918,16 +1123,16 @@ bool openposeUtil::saveposeavi()
 	//logInfo("-----------------------------sfdddddddddddddddddddd-------+++++");
 	// Stop recording
 	//zed.disableRecording();
-	
+
 	//retflag = false;
 	return true;
 
 }
 void openposeUtil::addmanpose()
 {
-	
 
-	fout.open(getpose_data_Dir().c_str()+std::to_string(jsonidx)+".json", std::ios::app);
+
+	fout.open(getpose_data_Dir().c_str() + std::to_string(jsonidx) + ".json", std::ios::app);
 
 	Json::Value oneposes;        // 根节点
 	//oneposes["id"] = getNowTime(); // 根节点下"name"对应的值"HaKing"
@@ -950,7 +1155,7 @@ void openposeUtil::addmanpose()
 	item["x"] = angle.x;
 	item["y"] = angle.y;
 	item["desc"] = angle.desc;
-	
+
 
 	//item["px"] = angle.pos.x;
 	//item["py"] = angle.pos.y;
@@ -1028,7 +1233,7 @@ void openposeUtil::addmanpose()
 	array.append(item); // append()以数组的形式添加
 
 	//---------------------------------
-	
+
 
 	angle = _manpose->getang_kneeankle_plane_normal(BODY_LEFT);
 
@@ -1131,19 +1336,19 @@ void openposeUtil::addmanpose()
 	//---------------------------------
 
 
-	
+
 	oneposes["bodypose"] = array;
 
 	//Json::StreamWriterBuilder  builder;
 	//builder.settings_["emitUTF8"]= true;
-	
+
 	std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
 
 
-	
+
 	//json_root["bodyposes"].append(oneposes);
-	
-	
+
+
 
 	///logInfo("start save json data");
 	writer->write(oneposes, &fout);
@@ -1188,7 +1393,7 @@ void openposeUtil::startSavezedavi()
 
 
 	savezedavi_callback = std::thread(&openposeUtil::savezedavi, this);
-	
+
 }
 std::string openposeUtil::endSavezedavi()
 {
@@ -1213,7 +1418,7 @@ bool openposeUtil::savezedavi()
 	logInfo("------------------------------------+++++");
 
 
-	
+
 	//logInfo(ii);
 	//outputVideo = new VideoWriter(getpose_avi_File(), VideoWriter::fourcc('M','J','P','G'), 10, cv::Size(672, 376),true);
 
@@ -1244,7 +1449,7 @@ void openposeUtil::GetStringSize(HDC hDC, const char* str, int* w, int* h)
 	if (h != 0) * h = size.cy;
 
 }
-int openposeUtil::gettextlen(cv::Mat& dst, const char* str, Point org)
+int openposeUtil::gettextlen(cv::Mat & dst, const char* str, Point org)
 {
 
 	CV_Assert(dst.data != 0 && (dst.channels() == 1 || dst.channels() == 3));
@@ -1256,9 +1461,11 @@ int openposeUtil::gettextlen(cv::Mat& dst, const char* str, Point org)
 
 
 
-	
+
 	HDC hDC = CreateCompatibleDC(0);
 
+	if (hDC == NULL)
+		return std::string(str).length();
 
 	int strBaseW = 0, strBaseH = 0;
 	int singleRow = 0;
@@ -1286,15 +1493,17 @@ int openposeUtil::gettextlen(cv::Mat& dst, const char* str, Point org)
 
 	if (org.x + strBaseW < 0 || org.y + strBaseH < 0)
 	{
-		
+
 		DeleteObject(hDC);
 		return 0;
 	}
 
 	r = org.x + strBaseW > dst.cols ? dst.cols - org.x - 1 : strBaseW - 1;
+
+	DeleteObject(hDC);
 	return r;
 }
-void openposeUtil::mergeimg(cv::Mat& img1, cv::Mat& img2, cv::Mat& img3, cv::Mat& img4 )
+void openposeUtil::mergeimg(cv::Mat & img1, cv::Mat & img2, cv::Mat & img3, cv::Mat & img4)
 {
 	/*cv::Mat img1 = cv::imread("test1.jpg");
 	cv::Mat img2 = cv::imread("test2.jpg");
@@ -1424,7 +1633,7 @@ std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::strin
 	logInfo(zedposeavi_file);
 	logInfo(posedata_dir);
 	reinit();
-	
+
 	//fromjson(posedata_file);
 	///std::list<Json::Value> jsonbodyposels = getbodyposesfromjsonfile(posedata_dir);
 
@@ -1461,17 +1670,17 @@ std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::strin
 		logInfo("无法打开视频文件");
 		return "";
 	}
-	cv::Mat simg1, simg2;
+	cv::Mat simg1, simg2,simg4;
 
 	cv::Mat img1, img2, img3, img4;
 
-	
+
 	int i = 0;
 	Json::Value jsonbodypose;
 
 	Resolution image_size;
 	int new_width, new_height;
-	
+
 
 
 	image_size = zed.getCameraInformation().camera_resolution;
@@ -1493,48 +1702,64 @@ std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::strin
 	//logInfo(nb_frames);
 	zed.setSVOPosition(0);
 	int videoFramesNum = poseavicap.get(CAP_PROP_FRAME_COUNT);//获取视频帧数
-	
-	int framestep = nb_frames / videoFramesNum;
+
+	//int framestep = nb_frames / videoFramesNum;
 
 
 	logInfo("frame data is ");
-	logInfo(nb_frames);
-	logInfo(videoFramesNum);
-	logInfo(framestep);
 
-	
-	while (poseavicap.read(zedposeimg)&& hkcap.read(simg1))
+	logInfo(zedimgnum);
+	logInfo(poseimgnum);
+	logInfo(videoFramesNum);
+	cout <<"pose frmaes is "<<videoFramesNum << endl;
+	//logInfo(nb_frames);
+	//logInfo(framestep);
+	zedimgnum = 997;
+	poseimgnum = 1072;
+	hkimgnum = 276;
+
+
+	while (poseavicap.grab())
 	{
+		if ((i % 4)==0)
+		{
+			hkcap.grab();
+			hkcap.retrieve(simg1);
+		}
+		
+
 		//svo_position = zed.getSVOPosition();
 		//zed.setSVOPosition(i * framestep);
+		poseavicap.retrieve(zedposeimg);
+		cout << "-------------------------1111111111" << endl;
 		if (zed.grab(rt_param) == ERROR_CODE::SUCCESS) {
 
 			zed.retrieveImage(image_zed, VIEW::LEFT);
 			cv::cvtColor(image_ocv, simg2, cv::COLOR_RGBA2RGB);
 		}
+		cout << "-------------------------222222222222222" << endl;
 
-		
-		cv::resize(simg1,img1,zedposeimg.size());
+		cv::resize(simg1, img1, zedposeimg.size());
 
 		cv::imshow("test", simg2);
 
 		waitKey(10);
 		//zedavicap.retrieve(simg2);
-		
-		
-		
+
+
+
 		cv::resize(simg2, img2, zedposeimg.size());
 
 		//jsonbodypose = getJsonByIndex(jsonbodyposels,i);
-		cout << posedata_dir + std::to_string(i) + ".json" << endl;
-		fromjson(posedata_dir+std::to_string(i)+".json");
-		cout << "over from json" << endl;
+		//cout << posedata_dir + std::to_string(i) + ".json" << endl;
+		simg4 = fromjson(posedata_dir + std::to_string(i) + ".json");
+		//cout << "over from json" << endl;
 		//recalcposedatimg(jsonbodypose);
 		//cv::imshow("Test2", img2);
 		//waitKey(10);
-		cv::resize(zedposedataimg, img4, zedposeimg.size());
+		cv::resize(simg4, img4, zedposeimg.size());
 		cout << "----------------------" << endl;
-		mergeimg(img1, img2, zedposeimg, img4);	
+		mergeimg(img1, img2, zedposeimg, img4);
 		cout << "--over merge image--------------------" << endl;
 		if (!outmergeVideo.isOpened())
 		{
@@ -1551,7 +1776,7 @@ std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::strin
 		sl::sleep_ms(20);
 
 		cout << "sleep 20ms" << endl;
-		zedposedataimg.release();
+		//zedposedataimg.release();
 
 		i++;
 	}
@@ -1562,6 +1787,12 @@ std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::strin
 
 	poseavicap.release();
 	outmergeVideo.release();
+
+
+	poseimgnum = 0;
+	zedimgnum = 0;
+	hkimgnum = 0;
+	jsonnum = 0;
 	//mergeimg(cv::Mat & img1, cv::Mat & img2, cv::Mat & img3, cv::Mat & img4)
 	// Load 4 images from the disk
 	logInfo("over merge avi");
@@ -1714,32 +1945,32 @@ std::list<Angle> openposeUtil::getAnglesFromonebodypose(Json::Value _json_bodypo
 
 	//json_is.open(_json_file, std::ios::binary);
 	//if (json_reader.parse(json_is, json_root, FALSE))
-	
-	
-		int file_size = _json_bodypose.size();  // 得到"files"的数组个数  
-		//std::wstring wsdesc;
-		std::string sdesc = "";
-		Angle angle;
-		for (int i = 0; i < file_size; ++i)  // 遍历数组  
-		{
-			Json::Value leftright = _json_bodypose[i]["LEFTRIGHT"];
-			double _angle = _json_bodypose[i]["angle"].asDouble();
-			int x = _json_bodypose[i]["x"].asInt();
-			int y = _json_bodypose[i]["y"].asInt();
-			sdesc = _json_bodypose[i]["desc"].asString();
 
-			//wsdesc = s2ws(sdesc);
-			angle.angle = _angle;
-			angle.x = x;
-			angle.y = y;
-			angle.desc = sdesc;
-			rs.emplace_back(angle);
-		}
+
+	int file_size = _json_bodypose.size();  // 得到"files"的数组个数  
+	//std::wstring wsdesc;
+	std::string sdesc = "";
+	Angle angle;
+	for (int i = 0; i < file_size; ++i)  // 遍历数组  
+	{
+		Json::Value leftright = _json_bodypose[i]["LEFTRIGHT"];
+		double _angle = _json_bodypose[i]["angle"].asDouble();
+		int x = _json_bodypose[i]["x"].asInt();
+		int y = _json_bodypose[i]["y"].asInt();
+		sdesc = _json_bodypose[i]["desc"].asString();
+
+		//wsdesc = s2ws(sdesc);
+		angle.angle = _angle;
+		angle.x = x;
+		angle.y = y;
+		angle.desc = sdesc;
+		rs.emplace_back(angle);
+	}
 	return rs;
 }
 void openposeUtil::recalcposedatimg(Json::Value _json_bodypose)
 {
-	
+
 	std::list<Angle> angls = getAnglesFromonebodypose(_json_bodypose);
 
 
@@ -1772,10 +2003,10 @@ std::list<Json::Value> openposeUtil::getbodyposesfromjsonfile(std::string _json_
 	std::list<Json::Value> rs;
 	json_is.open(_json_file, std::ios::binary);
 	Json::Value jsls;
-	while(json_reader.parse(json_is, json_root, FALSE))
+	while (json_reader.parse(json_is, json_root, FALSE))
 	{
-	
-	//	logInfo(json_root.asString());
+
+		//	logInfo(json_root.asString());
 		rs.emplace_back(json_root);
 		//code = json_root.get("bodypose", "null").asString();// 访问节点，Return the member named key if it exist, defaultValue otherwise.    
 		//jsls = json_root["bodypose"];
@@ -1803,7 +2034,7 @@ std::list<Angle> openposeUtil::fromjsonfile(std::string _json_file)
 
 	if (json_reader.parse(json_is, json_root, FALSE))
 	{
-		
+
 		//if (!json_root["id"].isNull())  // 访问节点，Access an object value by name, create a null member if it does not exist.  
 		//	code = json_root["bodypose"].asString();
 
@@ -1817,7 +2048,7 @@ std::list<Angle> openposeUtil::fromjsonfile(std::string _json_file)
 		Angle angle;
 		for (int i = 0; i < file_size; ++i)  // 遍历数组  
 		{
-			cout << "++++++++++++++++++++++sfsdfsdf" << endl;
+		//	cout << "++++++++++++++++++++++sfsdfsdf" << endl;
 			Json::Value leftright = json_root["bodypose"][i]["LEFTRIGHT"];
 			double _angle = json_root["bodypose"][i]["angle"].asDouble();
 			int x = json_root["bodypose"][i]["x"].asInt();
@@ -1829,20 +2060,21 @@ std::list<Angle> openposeUtil::fromjsonfile(std::string _json_file)
 			angle.x = x;
 			angle.y = y;
 			angle.desc = sdesc;
-			rs.emplace_back(angle);			
-			
+			rs.emplace_back(angle);
+
 		}
 	}
-	else
-	cout << "++over dsfsdfsdfsdfsddf" << endl;
+	/*else
+		cout << "++over dsfsdfsdfsdfsddf" << endl;*/
 	json_is.close();
 
 
 	return rs;
 }
 
-void openposeUtil::fromjson(std::string json_file)
+cv::Mat openposeUtil::fromjson(std::string json_file)
 {
+	
 	//Mat img（500，1000，CV_8UC3，Scalar（0, 0，100））;
 	///zedposedataimg.release();
 	//cv::Mat img(image_height,image_width, CV_8UC3, Scalar(100, 250, 30));
@@ -1850,41 +2082,41 @@ void openposeUtil::fromjson(std::string json_file)
 
 	// crearting window for image display 
 	//namedWindow(geeks_window);
-	cout << "11111111111111111111111111"<<endl;
-	zedposedataimg.create(image_height, image_width, CV_8UC3);
-	cout << "22222222222222222222222222" << endl;
+	cout << json_file << endl;
+	cv::Mat textimg(image_height, image_width, CV_8UC3,Scalar(0, 0, 0));
+	//cout << "22222222222222222222222222" << endl;
 	std::list<Angle> posels = fromjsonfile(json_file);
-	cout << "3333333333333333333333333333333" << endl;
+	//cout << "3333333333333333333333333333333" << endl;
 	int anggount = posels.size();
 
 
 	int ydiv = 0;
-	if(anggount!=0)
-	ydiv = image_height / anggount;
+	if (anggount != 0)
+		ydiv = image_height / anggount;
 
 	int i = 0;
-	std::string angleinfo; 
-	cout << "1$$$$$$$$$$$$$$$$$$$$$$" << endl;
+	std::string angleinfo;
+	//cout << "1$$$$$$$$$$$$$$$$$$$$$$" << endl;
 	for (list <Angle> ::iterator it = posels.begin(); it != posels.end(); ++it)
 	{
-		logInfo(*it);
+	//	logInfo(*it);
 		angleinfo = printangleinfo(*it);
-		drawText(&zedposedataimg,angleinfo, cv::Point(0, i*ydiv));
+		drawText(&textimg, angleinfo, cv::Point(0, i * ydiv));
 		i++;
-		cout << "444444444444444444444444444444444" << endl;
+	//	cout << "444444444444444444444444444444444" << endl;
 	}
 
 
-	cout << "over json to img" << endl;
+	//cout << "over json to img" << endl;
 	//cv::Mat img1(600, 800, CV_8UC3, Scalar(100, 250, 30));
 	//zedposedataimg.copyTo(img);
 	//Mat::zeros(Size(image.cols, image.rows), CV_8UC1);
-	logInfo("----------------oonvert json to img");
+	//logInfo("----------------oonvert json to img");
 	///drawText(&zedposedataimg, "fsfsdffsdlfjjsldfjlsj", cv::Point(0, 0));
-	
-	
 
-	
+
+
+
 	// image shown inside the window 
 	//imshow(geeks_window, zedposedataimg);
 
@@ -1896,16 +2128,17 @@ void openposeUtil::fromjson(std::string json_file)
 	//imshow("drawtext", img1);
 	//imshow("drawtext", zedposedataimg);
 	//return cv::Mat();
+	return textimg;
 }
 
-bool openposeUtil::initFloorZED(sl::Camera& zed) {
+bool openposeUtil::initFloorZED(sl::Camera & zed) {
 	bool init = false;
 #if ENABLE_FLOOR_PLANE_DETECTION
-	
+
 	const int timeout = 20;
 	int count = 0;
 
-	logInfo("Looking for the floor plane to initialize the tracking..." );
+	logInfo("Looking for the floor plane to initialize the tracking...");
 
 	while (!init && count++ < timeout) {
 		zed.grab();
@@ -1917,7 +2150,7 @@ bool openposeUtil::initFloorZED(sl::Camera& zed) {
 
 
 		if (init) {
-			logInfo("resetTrackingFloorFrame" );
+			logInfo("resetTrackingFloorFrame");
 			logInfo(resetTrackingFloorFrame);
 			zed.getPosition(camera_pose, sl::REFERENCE_FRAME::WORLD);
 			logInfo("Floor found at : \n");
@@ -1926,13 +2159,13 @@ bool openposeUtil::initFloorZED(sl::Camera& zed) {
 			logInfo(plane.getClosestDistance(camera_pose.pose_data.getTranslation()));
 			logInfo("m");
 			Transform tr = plane.getPose();
-			
+
 
 			logInfo(tr);
 			logInfo(tr1);
 			sl::float3 n1 = plane.getNormal();
 			sl::float3 pc = plane.getCenter();
-		
+
 			logInfo("floor normal is ");
 			logInfo(n1);
 			logInfo("floor center point is ");
@@ -1943,7 +2176,7 @@ bool openposeUtil::initFloorZED(sl::Camera& zed) {
 		sl::sleep_ms(20);
 	}
 	if (init) for (int i = 0; i < 4; i++) zed.grab();
-	else logInfo( "Floor plane not found, starting anyway");
+	else logInfo("Floor plane not found, starting anyway");
 #endif
 	return init;
 }
@@ -1953,11 +2186,11 @@ bool openposeUtil::initFloorZED(sl::Camera& zed) {
 
 void openposeUtil::startZED() {
 	quit = false;
-	zed_callback = std::thread(&openposeUtil::runZed,this);
+	zed_callback = std::thread(&openposeUtil::runZed, this);
 }
 
 void openposeUtil::startOpenpose() {
-	openpose_callback = std::thread(&openposeUtil::findpose,this);
+	openpose_callback = std::thread(&openposeUtil::findpose, this);
 }
 
 void openposeUtil::findpose() {
@@ -1990,7 +2223,7 @@ void openposeUtil::findpose() {
 
 // The 3D of the point is not directly taken 'as is'. If the measurement isn't valid, we look around the point in 2D to find a close point with a valid depth
 
-sl::float4 openposeUtil::getPatchIdx(const int& center_i, const int& center_j, sl::Mat& xyzrgba) {
+sl::float4 openposeUtil::getPatchIdx(const int& center_i, const int& center_j, sl::Mat & xyzrgba) {
 	sl::float4 out(NAN, NAN, NAN, NAN);
 	bool valid_measure;
 	int i, j;
@@ -2017,7 +2250,7 @@ sl::float4 openposeUtil::getPatchIdx(const int& center_i, const int& center_j, s
 
 //// 计算得到系统需要的各种角度
 
-void openposeUtil::calcmanpose(op::Array<float>& poseKeypoints, sl::Mat& xyz)
+void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 {
 	// Common parameters needed
 	const auto numberPeopleDetected = poseKeypoints.getSize(0);
@@ -2120,7 +2353,7 @@ void openposeUtil::calcmanpose(op::Array<float>& poseKeypoints, sl::Mat& xyz)
 		float size = 0.1;
 		vertices.emplace_back(center_gravity.x, center_gravity.y + size, center_gravity.z);
 		vertices.emplace_back(center_gravity.x, center_gravity.y - size, center_gravity.z);
-	
+
 
 		vertices.emplace_back(center_gravity.x + size, center_gravity.y, center_gravity.z);
 		vertices.emplace_back(center_gravity.x - size, center_gravity.y, center_gravity.z);
@@ -2131,10 +2364,10 @@ void openposeUtil::calcmanpose(op::Array<float>& poseKeypoints, sl::Mat& xyz)
 
 #endif
 		/////////////////////////// 
-		int cvx=0, cvy =0;
+		int cvx = 0, cvy = 0;
 
-		sl::float4 pv0, pv1,pv2,pv3;
-		pv0= sl::float4(NAN, NAN, NAN, 0);
+		sl::float4 pv0, pv1, pv2, pv3;
+		pv0 = sl::float4(NAN, NAN, NAN, 0);
 		pv1 = sl::float4(NAN, NAN, NAN, 0);
 		pv2 = sl::float4(NAN, NAN, NAN, 0);
 		pv3 = sl::float4(NAN, NAN, NAN, 0);
@@ -2152,10 +2385,10 @@ void openposeUtil::calcmanpose(op::Array<float>& poseKeypoints, sl::Mat& xyz)
 		logInfo("臀部上脊柱骨与地面平面法线的夹角 none_neckmidhip_plane");
 
 		logInfo(vidx);
-		_manpose->setang_midhip_plane_normal(calctwovectorang(vidx, pv0, pv1,pv2,pv3, keypoints_position), cvx, cvy,"臀部上脊柱骨与地面平面法线的夹角");
+		_manpose->setang_midhip_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "臀部上脊柱骨与地面平面法线的夹角");
 
 
-		
+
 		logInfo(_manpose->getang_midhip_plane_normal());
 		logInfo("臀部上脊柱骨与地面平面法线的夹角 none_neckmidhip_plane  over");
 
@@ -2179,7 +2412,7 @@ void openposeUtil::calcmanpose(op::Array<float>& poseKeypoints, sl::Mat& xyz)
 		logInfo(vidx);
 
 
-		_manpose->setang_hipknee_midhip(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position),cvx,cvy,"大腿与上身的夹角右",BODY_RIGHT);
+		_manpose->setang_hipknee_midhip(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "大腿与上身的夹角右", BODY_RIGHT);
 
 
 
@@ -2208,7 +2441,7 @@ void openposeUtil::calcmanpose(op::Array<float>& poseKeypoints, sl::Mat& xyz)
 		logInfo(vidx);
 
 
-		_manpose->setang_hipknee_midhip(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx,cvy,"大腿与上身的夹角左",BODY_LEFT);
+		_manpose->setang_hipknee_midhip(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "大腿与上身的夹角左", BODY_LEFT);
 
 
 
@@ -2239,7 +2472,7 @@ void openposeUtil::calcmanpose(op::Array<float>& poseKeypoints, sl::Mat& xyz)
 
 		logInfo(vidx);
 
-		_manpose->setang_hipknee_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx,cvy,"大腿与地面平面法线的夹角右",BODY_RIGHT);
+		_manpose->setang_hipknee_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "大腿与地面平面法线的夹角右", BODY_RIGHT);
 
 
 
@@ -2267,7 +2500,7 @@ void openposeUtil::calcmanpose(op::Array<float>& poseKeypoints, sl::Mat& xyz)
 
 		logInfo(vidx);
 
-		_manpose->setang_hipknee_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx,cvy,"大腿与地面平面法线的夹角左",BODY_LEFT);
+		_manpose->setang_hipknee_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "大腿与地面平面法线的夹角左", BODY_LEFT);
 
 
 
@@ -2299,7 +2532,7 @@ void openposeUtil::calcmanpose(op::Array<float>& poseKeypoints, sl::Mat& xyz)
 
 		logInfo(vidx);
 
-		_manpose->setang_kneeankle_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx,cvy,"小腿与地面平面法线的夹角右",BODY_RIGHT);
+		_manpose->setang_kneeankle_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "小腿与地面平面法线的夹角右", BODY_RIGHT);
 
 
 
@@ -2330,7 +2563,7 @@ void openposeUtil::calcmanpose(op::Array<float>& poseKeypoints, sl::Mat& xyz)
 		logInfo(vidx);
 
 
-		_manpose->setang_kneeankle_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position),cvx,cvy,"小腿与地面平面法线的夹角左", BODY_LEFT);
+		_manpose->setang_kneeankle_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "小腿与地面平面法线的夹角左", BODY_LEFT);
 
 
 
@@ -2363,7 +2596,7 @@ void openposeUtil::calcmanpose(op::Array<float>& poseKeypoints, sl::Mat& xyz)
 		logInfo(vidx);
 
 
-		_manpose->setang_kneeankle_hipknee(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position),cvx,cvy,"小腿与大腿的夹角右", BODY_RIGHT);
+		_manpose->setang_kneeankle_hipknee(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "小腿与大腿的夹角右", BODY_RIGHT);
 
 
 
@@ -2394,7 +2627,7 @@ void openposeUtil::calcmanpose(op::Array<float>& poseKeypoints, sl::Mat& xyz)
 		logInfo(vidx);
 
 
-		_manpose->setang_kneeankle_hipknee(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx,cvy,"小腿与大腿的夹角左",BODY_LEFT);
+		_manpose->setang_kneeankle_hipknee(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "小腿与大腿的夹角左", BODY_LEFT);
 
 
 
@@ -2426,7 +2659,7 @@ void openposeUtil::calcmanpose(op::Array<float>& poseKeypoints, sl::Mat& xyz)
 		logInfo(vidx);
 
 
-		_manpose->setang_anklebigtoe_kneeankle(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx,cvy,"踝关节与小腿的夹角右",BODY_RIGHT);
+		_manpose->setang_anklebigtoe_kneeankle(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "踝关节与小腿的夹角右", BODY_RIGHT);
 
 
 
@@ -2455,7 +2688,7 @@ void openposeUtil::calcmanpose(op::Array<float>& poseKeypoints, sl::Mat& xyz)
 
 		logInfo(vidx);
 
-		_manpose->setang_anklebigtoe_kneeankle(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position),cvx,cvy,"踝关节与小腿的夹角左", BODY_LEFT);
+		_manpose->setang_anklebigtoe_kneeankle(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "踝关节与小腿的夹角左", BODY_LEFT);
 
 
 
@@ -2487,7 +2720,7 @@ void openposeUtil::calcmanpose(op::Array<float>& poseKeypoints, sl::Mat& xyz)
 		logInfo(vidx);
 
 
-		_manpose->setang_anklebigtoe_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position),cvx,cvy,"踝关节与地面平面法线的夹角右", BODY_RIGHT);
+		_manpose->setang_anklebigtoe_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "踝关节与地面平面法线的夹角右", BODY_RIGHT);
 
 
 
@@ -2515,7 +2748,7 @@ void openposeUtil::calcmanpose(op::Array<float>& poseKeypoints, sl::Mat& xyz)
 
 		logInfo(vidx);
 
-		_manpose->setang_anklebigtoe_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx,cvy,"踝关节与地面平面法线的夹角左",BODY_LEFT);
+		_manpose->setang_anklebigtoe_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "踝关节与地面平面法线的夹角左", BODY_LEFT);
 
 
 
@@ -2571,7 +2804,7 @@ void openposeUtil::calcplaneangle(std::map<int, sl::float4> keypoints_position)
 	pt2 = ns;
 
 
-	
+
 
 	pt4 = ns - ptcode8;
 
@@ -2612,7 +2845,7 @@ void openposeUtil::calcplaneangle(std::map<int, sl::float4> keypoints_position)
 	//vidx[2] = _manpose->getbody_part_index("none_neckmidhip_plane", SECOND_SEC_START);
 	//vidx[3] = _manpose->getbody_part_index("none_neckmidhip_plane", SECOND_SEC_END);
 
-	_manpose->setang_plane1_left_right(rt,0,0,"左右区分");
+	_manpose->setang_plane1_left_right(rt, 0, 0, "左右区分");
 
 	if (rt > 0)
 	{
@@ -2630,7 +2863,7 @@ void openposeUtil::calcplaneangle(std::map<int, sl::float4> keypoints_position)
 
 	double rt2 = plane2.pointistoponplane(ptcode1 - plane2.getintpt());
 
-	_manpose->setang_plane2_before_after(rt2,0, 0, "前后区分");
+	_manpose->setang_plane2_before_after(rt2, 0, 0, "前后区分");
 
 
 	if (rt2 > 0)
@@ -2670,15 +2903,15 @@ double openposeUtil::calctwovectorang(int  vidx[4], sl::float4& pv0, sl::float4&
 		pv1 = keypoints_position[vidx[1]];
 		logInfo("pv0.x y z is ");
 		logInfo(pv0);
-		
+
 
 		logInfo("pv1.x y z is ");
 		logInfo(pv1);
-		
+
 
 		logInfo("pv2.x y z is ");
 		logInfo(pv2);
-		
+
 	}
 	else
 	{
@@ -2686,7 +2919,7 @@ double openposeUtil::calctwovectorang(int  vidx[4], sl::float4& pv0, sl::float4&
 		pv1 = keypoints_position[vidx[1]];
 		pv2 = keypoints_position[vidx[2]];
 		pv3 = keypoints_position[vidx[3]];
-		
+
 		logInfo("pv0.x y z is ");
 		logInfo(pv0);
 
@@ -2702,8 +2935,8 @@ double openposeUtil::calctwovectorang(int  vidx[4], sl::float4& pv0, sl::float4&
 		logInfo(pv3);
 
 	}
-	
-	
+
+
 	bool retflag;
 	retflag = AssertVectorIsNAN(pv0) && AssertVectorIsNAN(pv1) && AssertVectorIsNAN(pv2);
 	if (retflag == true)
@@ -2713,21 +2946,21 @@ double openposeUtil::calctwovectorang(int  vidx[4], sl::float4& pv0, sl::float4&
 	}
 
 	sl::float4 v1 = pv0 - pv1;
-	sl::float4 vn,v2;
+	sl::float4 vn, v2;
 	v2 = sl::float4(NAN, NAN, NAN, 0);
 	vn = sl::float4(NAN, NAN, NAN, 0);
 
 
 	if (AssertVectorIsNAN(pv3) == true)
 	{
-		vn.z=pv1.z;
-		vn.x=pv1.x;
+		vn.z = pv1.z;
+		vn.x = pv1.x;
 
 		vn.y = pv2.y;
 
 		v2 = pv2;
 		logInfo("000000000000000000");
-         
+
 	}
 	else
 	{
@@ -2749,7 +2982,7 @@ double openposeUtil::calctwovectorang(int  vidx[4], sl::float4& pv0, sl::float4&
 	//logInfo("v2 normal is ");
 	//logInfo(v2.square());
 
-	
+
 	//double dot = sl::float4::dot(v1,v2)/(v1.norm()*v2.norm());
 	sl::float4 v1u = getvector_unit(v1);
 	sl::float4 v2u = getvector_unit(v2);
@@ -2791,14 +3024,14 @@ double openposeUtil::calctwovectorang(int  vidx[4], sl::float4& pv0, sl::float4&
 	return angle;
 
 
-		
+
 
 	//pv0 = 0;
 
 
 }
 
-bool openposeUtil::AssertVectorIsNAN(sl::float4& pv0)
+bool openposeUtil::AssertVectorIsNAN(sl::float4 & pv0)
 {
 	logInfo("test pv is NAN");
 	logInfo(pv0.x);
@@ -2808,7 +3041,7 @@ bool openposeUtil::AssertVectorIsNAN(sl::float4& pv0)
 	logInfo(pv0.z);
 
 
-	if (isnan(pv0.x)==true || isnan(pv0.y)==true || isnan(pv0.z)==true)
+	if (isnan(pv0.x) == true || isnan(pv0.y) == true || isnan(pv0.z) == true)
 	{
 		logInfo("check vector start");
 		logInfo(pv0.x);
@@ -2819,13 +3052,13 @@ bool openposeUtil::AssertVectorIsNAN(sl::float4& pv0)
 
 	}
 	else
-	return false;
+		return false;
 
 }
 
 
 
-bool openposeUtil::IsUseful(sl::float4& v1, sl::float4& v2, sl::float4& center_gravity)
+bool openposeUtil::IsUseful(sl::float4 & v1, sl::float4 & v2, sl::float4 & center_gravity)
 {
 	// Filtering 3D Skeleton
 	// Compute euclidian distance
@@ -2845,7 +3078,7 @@ bool openposeUtil::IsUseful(sl::float4& v1, sl::float4& v2, sl::float4& center_g
 		return false;
 }
 
-void openposeUtil::fill_ptcloud(sl::Mat& xyzrgba) {
+void openposeUtil::fill_ptcloud(sl::Mat & xyzrgba) {
 	std::vector<sl::float3> pts;
 	std::vector<sl::float3> clr;
 	int total = xyzrgba.getResolution().area();
@@ -2913,6 +3146,7 @@ void openposeUtil::runZed() {
 
 
 	image_size = zed.getCameraInformation().camera_resolution;
+	
 	new_width = image_size.width / 1;
 	new_height = image_size.height / 1;
 
@@ -2921,7 +3155,7 @@ void openposeUtil::runZed() {
 
 	/*logInfo("------------width--------");
 	logInfo(new_width);
-	
+
 	logInfo("------------width--------");
 	logInfo(new_height);*/
 
@@ -2929,15 +3163,23 @@ void openposeUtil::runZed() {
 	image_ocv = slMat2cvMat(image_zed);
 	sl::Mat depth_image_zed(new_width, new_height, MAT_TYPE::U8_C4);
 	cv::Mat depth_image_ocv = slMat2cvMat(depth_img_buffer);
-	cv::Mat rimg,rrimg;
+	cv::Mat rimg, rrimg;
 	sl::Resolution new_image_size;
 	new_image_size.height = new_height;
 	new_image_size.width = new_width;
+	logInfo("zed frame is ");
+	logInfo(zed.getSVONumberOfFrames());
+	int zzz = zed.getSVONumberOfFrames();
+	
+	cout << "zed frame is " << zzz << endl;
 
+	int endnum = 0;
 	while (!quit) {
 		INIT_TIMER
+			try {
 			if (need_new_image) {
-				if (zed.grab() == ERROR_CODE::SUCCESS) {
+				if (zed.grab() == ERROR_CODE::SUCCESS)
+				{
 
 					zed.retrieveImage(image_zed, VIEW::LEFT, MEM::CPU, new_image_size);
 					//zed.retrieveImage(img_buffer, VIEW::LEFT, sl::MEM::CPU, image_resolution);
@@ -2965,7 +3207,8 @@ void openposeUtil::runZed() {
 
 					if (!image_ocv.empty())
 					{
-						cv::imshow("Image", image_ocv);
+						//cv::imshow("Image", image_ocv);
+						zedimgnum++;
 						cv::cvtColor(image_ocv, inputImage, cv::COLOR_RGBA2RGB);
 						//if (bsaveZed) {
 						//
@@ -2974,10 +3217,10 @@ void openposeUtil::runZed() {
 
 						//	//logInfo("start save zed video");
 						////	sl::sleep_ms(1);			
-					
+
 						//}
 
-						
+
 
 						if (FLAGS_depth_display)
 							zed.retrieveImage(depth_img_buffer, VIEW::DEPTH, sl::MEM::CPU, new_image_size);
@@ -2996,111 +3239,158 @@ void openposeUtil::runZed() {
 					ready_to_start = true;
 					chrono_zed = true;
 				}
-				else sl::sleep_ms(1);
+				else
+				{
+					if (endnum > 7)
+					{
+						stopposeservice();
+					}
+					sl::sleep_ms(1);
+					endnum++;
+				}
+				
 			}
 			else sl::sleep_ms(1);
 
-		// -------------------------  RENDERING -------------------------------
-		// Render poseKeypoints
-		if (data_out_mtx.try_lock()) {
+			// -------------------------  RENDERING -------------------------------
+			// Render poseKeypoints
+			if (data_out_mtx.try_lock())
+			{
 
-			//fill_people_ogl(poseKeypoints, depth_buffer2);
-			calcmanpose(poseKeypoints, depth_buffer2);
-//			viewer.update(peopleObj);
+				//fill_people_ogl(poseKeypoints, depth_buffer2);
+				calcmanpose(poseKeypoints, depth_buffer2);
+				//			viewer.update(peopleObj);
 
-			//if (FLAGS_ogl_ptcloud) {
-			//	fill_ptcloud(depth_buffer2);
-			////	viewer.update(cloud);
-			//}
+							//if (FLAGS_ogl_ptcloud) {
+							//	fill_ptcloud(depth_buffer2);
+							////	viewer.update(cloud);
+							//}
 
-			if (FLAGS_opencv_display) {
-				if (!outputArray2.empty())
-					poseRenderer.renderPose(outputArray2, poseKeypoints, scaleInputToOutput);
+				if (FLAGS_opencv_display) {
+					if (!outputArray2.empty())
+					{
+						poseRenderer.renderPose(outputArray2, poseKeypoints, scaleInputToOutput);
 
-				// OpenPose output format to cv::Mat
-				if (!outputArray2.empty())
-					outputImage = *((cv::Mat*)opOutputToCvMat.formatToCvMat(outputArray2).getCvMat());
-				data_out_mtx.unlock();
-				// Show results
-				if (!outputArray2.empty())
-				{
+						// OpenPose output format to cv::Mat
 
-					drawText(&outputImage, _manpose->getang_plane1_left_right(), BODY_LEFT);
-					drawText(&outputImage, _manpose->getang_plane2_before_after());
-					drawText(&outputImage, _manpose->getang_midhip_plane_normal());
-					drawText(&outputImage, _manpose->getang_hipknee_midhip(BODY_LEFT), BODY_LEFT);
-					drawText(&outputImage, _manpose->getang_hipknee_midhip(BODY_RIGHT));
-
-					drawText(&outputImage, _manpose->getang_hipknee_plane_normal(BODY_LEFT), BODY_LEFT);
-					drawText(&outputImage, _manpose->getang_hipknee_plane_normal(BODY_RIGHT));
-
-					drawText(&outputImage, _manpose->getang_kneeankle_plane_normal(BODY_LEFT),BODY_LEFT);
-					drawText(&outputImage, _manpose->getang_kneeankle_plane_normal(BODY_RIGHT));
-
-
-					drawText(&outputImage, _manpose->getang_kneeankle_hipknee(BODY_LEFT), BODY_LEFT);
-					drawText(&outputImage, _manpose->getang_kneeankle_hipknee(BODY_RIGHT));
-
-					drawText(&outputImage, _manpose->getang_anklebigtoe_kneeankle(BODY_LEFT), BODY_LEFT);
-					drawText(&outputImage, _manpose->getang_anklebigtoe_kneeankle(BODY_RIGHT));
-
-
-					drawText(&outputImage, _manpose->getang_anklebigtoe_plane_normal(BODY_LEFT), BODY_LEFT);
-					drawText(&outputImage, _manpose->getang_anklebigtoe_plane_normal(BODY_RIGHT));
-
-
-
-					//logInfo("img channel is ");
-					//logInfo(outputImage.channels());
-					cv::imshow("Pose", outputImage);
-					if(bsavePose) {
-						
-						addmanpose();
-						jsonidx++;
-						//data_out_mtx.lock();
-						/*logInfo("outputimage height");
-						logInfo(outputImage.cols);
-						logInfo("outputimage width");
-						logInfo(outputImage.rows);*/
-						cv::resize(outputImage, rimg, cv::Size(simage_width, simage_height));
-						outposeVideo.write(rimg);
-						//logInfo("---------------------------------------------");
-						//logInfo(image_width);
-						//logInfo(image_height);
-						//logInfo("---------------------------------------------");
-						//logInfo("start save pose avi");
-						//sl::sleep_ms(1);
-						//sl::sleep_ms(int(1000.0 / 25));
-						//Sleep(int(1000.0 / fps));
-					
-
-						//data_out_mtx.unlock();
-					/*	if (frameidx >= maxframecount)
-						{
-
-						
-							bsavePose = false;
-							outputVideo.release();
-
-							logInfo("over here pose avi");
-						}*/
+						outputImage = *((cv::Mat*)opOutputToCvMat.formatToCvMat(outputArray2).getCvMat());
 					}
-				   
-				}
-				//  cv::put
-				if (FLAGS_depth_display)
-					cv::imshow("Depth", depth_image_ocv);
+					data_out_mtx.unlock();
+					// Show results
+					if (!outputImage.empty())
+					{
+						
+						drawText(&outputImage, _manpose->getang_plane1_left_right(), BODY_LEFT);
+						
+						drawText(&outputImage, _manpose->getang_plane2_before_after());
+						drawText(&outputImage, _manpose->getang_midhip_plane_normal());
+						drawText(&outputImage, _manpose->getang_hipknee_midhip(BODY_LEFT), BODY_LEFT);
+						drawText(&outputImage, _manpose->getang_hipknee_midhip(BODY_RIGHT));
 
-				cv::waitKey(10);
+						drawText(&outputImage, _manpose->getang_hipknee_plane_normal(BODY_LEFT), BODY_LEFT);
+						drawText(&outputImage, _manpose->getang_hipknee_plane_normal(BODY_RIGHT));
+
+						drawText(&outputImage, _manpose->getang_kneeankle_plane_normal(BODY_LEFT), BODY_LEFT);
+						drawText(&outputImage, _manpose->getang_kneeankle_plane_normal(BODY_RIGHT));
+
+
+						drawText(&outputImage, _manpose->getang_kneeankle_hipknee(BODY_LEFT), BODY_LEFT);
+						drawText(&outputImage, _manpose->getang_kneeankle_hipknee(BODY_RIGHT));
+
+						drawText(&outputImage, _manpose->getang_anklebigtoe_kneeankle(BODY_LEFT), BODY_LEFT);
+						drawText(&outputImage, _manpose->getang_anklebigtoe_kneeankle(BODY_RIGHT));
+
+
+						drawText(&outputImage, _manpose->getang_anklebigtoe_plane_normal(BODY_LEFT), BODY_LEFT);
+						drawText(&outputImage, _manpose->getang_anklebigtoe_plane_normal(BODY_RIGHT));
+
+
+
+						//logInfo("img channel is ");
+						//logInfo(outputImage.channels());
+						//cv::imshow("Pose", outputImage);
+						if (bsavePose) {
+
+							addmanpose();
+							jsonidx++;
+							poseimgnum++;
+							//data_out_mtx.lock();
+							/*logInfo("outputimage height");
+							logInfo(outputImage.cols);
+							logInfo("outputimage width");
+							logInfo(outputImage.rows);*/
+							cv::resize(outputImage, rimg, cv::Size(simage_width, simage_height));
+							outposeVideo.write(rimg);
+							//logInfo("---------------------------------------------");
+							//logInfo(image_width);
+							//logInfo(image_height);
+							//logInfo("---------------------------------------------");
+							//logInfo("start save pose avi");
+							//sl::sleep_ms(1);
+							//sl::sleep_ms(int(1000.0 / 25));
+							//Sleep(int(1000.0 / fps));
+
+
+							//data_out_mtx.unlock();
+						/*	if (frameidx >= maxframecount)
+							{
+
+								bsavePose = false;
+								outputVideo.release();
+								logInfo("over here pose avi");
+							}*/
+						}
+
+					}
+					//  cv::put
+				/*	if (FLAGS_depth_display)
+						cv::imshow("Depth", depth_image_ocv);*/
+
+						//cv::waitKey(10);
+						//cout << "pose num is " << poseimgnum << endl;
+				}
+			}
+
+			if (chrono_zed) {
+				//STOP_TIMER("ZED")
+				chrono_zed = false;
 			}
 		}
-
-		if (chrono_zed) {
-			//STOP_TIMER("ZED")
-			chrono_zed = false;
+		catch (int)
+		{
+			cout << "int calc error"<< endl;
+			logInfo("int calc error");
 		}
+		catch (float)
+		{
+			cout << "float calc error" << endl;
+			logInfo("float calc error");
+		}
+		catch (double)
+		{
+			cout << "double calc error" << endl;
+			logInfo("double calc error");
+		}
+		catch(std::exception ex)
+		{
+			cout << ex.what() << endl;
+			logInfo(ex.what());
+		}
+		catch (cv::Exception ex)
+		{
+			cout << ex.what() << endl;
+			logInfo(ex.what());
+		}
+		catch (runtime_error Runtime_error)
+		{
+			cout << Runtime_error.what() << endl;
+
+			logInfo(Runtime_error.what());
+		}
+		
+		//cout << "sleep 1 ms"<<endl;
 	}
-	destroyAllWindows();
+	//destroyAllWindows();
 }
 
 void openposeUtil::closezeddevice()
@@ -3116,7 +3406,7 @@ void openposeUtil::startposeservice(std::string svo_files)
 	initParameters.coordinate_units = unit;
 	initParameters.camera_disable_self_calib = true;
 	initParameters.coordinate_system = COORDINATE_SYSTEM::RIGHT_HANDED_Y_UP;
-	
+
 	//initParameters.depth_stabilization = true;
 	cout << svo_files << endl;
 	logInfo(svo_files);
@@ -3145,11 +3435,11 @@ void openposeUtil::startposeservice(std::string svo_files)
 
 	logInfo(tmpdir);
 	setpose_data_Dir(tmpdir);
-	
+
 	//logInfo(ii);
 	//outputVideo = new VideoWriter(getpose_avi_File(), VideoWriter::fourcc('M','J','P','G'), 10, cv::Size(672, 376),true);
 
-	
+
 	//setpose_data_Dir(tmpdir);
 
 
@@ -3188,11 +3478,39 @@ void openposeUtil::startposeservice(std::string svo_files)
 	if (FLAGS_scale_gap <= 0. && FLAGS_scale_number > 1) op::error("Incompatible flag configuration: scale_gap must be greater than 0 or scale_number = 1.", __LINE__, __FUNCTION__, __FILE__);
 
 
-	saveposeavi_callback = std::thread(&openposeUtil::saveposeavi, this);
+	
+
+
+	bsavePose = true;
+	//logInfo("------------------------------------+++++");
+
+
+	int ii = VideoWriter::fourcc('M', 'J', 'P', 'G');
+	logInfo("++++++++++++++++++++++++++++++++++++");
+	//logInfo(ii);
+	//outputVideo = new VideoWriter(getpose_avi_File(), VideoWriter::fourcc('M','J','P','G'), 10, cv::Size(672, 376),true);
+
+	logInfo(image_height);
+	logInfo(image_width);
+	outposeVideo.open(getpose_avi_File(), VideoWriter::fourcc('F', 'M', 'P', '4'), 10, cv::Size(image_width, image_height), true);
+	//outzedVideo.open(getzed_avi_File(), VideoWriter::fourcc('F', 'M', 'P', '4'), 10, cv::Size(image_width, image_height), true);
+
+	if (!outposeVideo.isOpened())
+	{
+		logInfo("codec failed\n");
+		return;
+	}
+	else
+		logInfo("create pose avi ");
+	//saveposeavi_callback = std::thread(&openposeUtil::saveposeavi, this);
 	//logInfo("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
 	// Start ZED callback
+
+	//startzedopenpose();
+
+
 	startZED();
-	//logInfo("end startZed");
+	////logInfo("end startZed");
 	startOpenpose();
 	///logInfo("IIIIIIIIIIII");
 	// Set the display callback
@@ -3205,7 +3523,7 @@ void openposeUtil::stoppposewithexitsys() {
 
 	cout << "start clean resource" << endl;
 	//viewer.exit();
-	
+
 
 	openpose_callback.join();
 	cout << "stop openpose callback" << endl;
@@ -3221,8 +3539,8 @@ void openposeUtil::stoppposewithexitsys() {
 	}
 	else
 		cout << "zed not need close" << endl;
-	
-	
+
+
 	cout << "11155555555555555555555555" << endl;
 	//logInfo("exit Processing Thread");
 
@@ -3359,5 +3677,3 @@ extern "C" void clean()
 {
 	//Control::getCurrentThread()->close();
 }
-
-

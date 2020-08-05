@@ -47,7 +47,7 @@ def click_connectVideo():
     myDll.startposeservice.restype = ctypes.c_void_p
     
     
-    svofiles=bytes("D:\\project\\ParatroopersTraining\\data\\222.svo","gbk")    
+    svofiles=bytes("D:\\project\\ParatroopersTraining\\data\\svo.svo","gbk")    
     
     myDll.startposeservice(svofiles)
     print("----------------")

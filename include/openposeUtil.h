@@ -150,6 +150,11 @@ private:
 
 	int poseimgidx;
 
+	int poseimgnum;
+	int zedimgnum;
+	int hkimgnum;
+	int jsonnum;
+
 
 	//op::PoseExtractorCaffe* poseExtractorCaffe;
 	//{ poseModel, FLAGS_openpose_root_dir + FLAGS_model_folder, FLAGS_num_gpu_start, {}, op::ScaleMode::ZeroToOne, 1 };
@@ -159,7 +164,7 @@ private:
 	{
 	  std::string info;
 
-	  info.append(angle.desc).append(":").append(floatTostring(angle.angle, 5)).append(" x,y:").append(floatTostring(angle.x, 5)).append(",").append(floatTostring(angle.y, 5)).append(":");
+	  info.append(angle.desc).append(":").append(floatTostring(angle.angle, 5));
 	  return info;
 	}
 
@@ -274,7 +279,7 @@ private:
 
 
 
-	void fromjson(std::string json_file);
+	cv::Mat fromjson(std::string json_file);
 	
 public:
 
@@ -358,6 +363,12 @@ public:
 
 	void startposeserviceonlinezed();
 
+	//调用同步zedopenpose处理
+	void startzedopenpose();
+
+
+	//同步运行zed和openpose
+	void runzedopenpose();
 
 	///一次采集
 	void startgetposeavidata();
