@@ -2313,6 +2313,38 @@ void openposeUtil::startOpenpose() {
 	openpose_callback = std::thread(&openposeUtil::findpose, this);
 }
 
+
+void openposeUtil::reinit()
+{
+	stdsvo_File = "";
+
+	stdpose_data_Dir = "";
+
+	stdzed_avi_File = "";
+
+	stdpose_avi_File = "";
+
+
+	stdmerge_avi_File = "";
+
+	bshow = true;
+
+	bsavePose = true;
+
+
+	bzero = false;
+
+	jsonidx = 0;
+
+
+	image_width = 720;
+	image_height = 405;
+
+	simage_width = 720;
+	simage_height = 405;
+
+}
+
 void openposeUtil::findpose() {
 
 	while (!ready_to_start) sl::sleep_ms(2); // Waiting for the ZED
@@ -2321,9 +2353,12 @@ void openposeUtil::findpose() {
 	op::PoseExtractorCaffe poseExtractorCaffe{ poseModel, user_model_folder, FLAGS_num_gpu_start,{}, op::ScaleMode::ZeroToOne, 1 };
 	poseExtractorCaffe.initializationOnThread();
 
+
+	
 	while (!quit) {
 		INIT_TIMER;
 		//  Estimate poseKeypoints
+		
 		if (!need_new_image) { // No new image
 			data_in_mtx.lock();
 			need_new_image = true;
@@ -3393,7 +3428,7 @@ void openposeUtil::runZed() {
 			{
 
 				//fill_people_ogl(poseKeypoints, depth_buffer2);
-				if(bsavePose)
+				if(bsavePose&&bzero)
 				calcmanpose(poseKeypoints, depth_buffer2);
 				//			viewer.update(peopleObj);
 
@@ -3416,6 +3451,9 @@ void openposeUtil::runZed() {
 					if (!outputImage.empty())
 					{
 						
+
+						if(bsavePose&&bzero)
+						{
 						drawText(&outputImage, _manpose->getang_plane1_left_right(), BODY_LEFT);
 						
 						drawText(&outputImage, _manpose->getang_plane2_before_after());
@@ -3440,7 +3478,7 @@ void openposeUtil::runZed() {
 						drawText(&outputImage, _manpose->getang_anklebigtoe_plane_normal(BODY_LEFT), BODY_LEFT);
 						drawText(&outputImage, _manpose->getang_anklebigtoe_plane_normal(BODY_RIGHT));
 
-
+						}
 
 						//logInfo("img channel is ");
 						//logInfo(outputImage.channels());
@@ -3451,7 +3489,7 @@ void openposeUtil::runZed() {
 							cv::imshow("Pose", outputImage);
 							sl::sleep_ms(1);
 						}
-						if (bsavePose) {
+						if (bsavePose&&bzero) {
 
 
 							//cout << "write pose" << endl;
@@ -3467,7 +3505,7 @@ void openposeUtil::runZed() {
 							outposeVideo.write(rimg);
 
 
-							if (endnum > 7)
+							if (endnum >0)
 							{
 
 								destroyAllWindows();
@@ -3499,6 +3537,16 @@ void openposeUtil::runZed() {
 								outputVideo.release();
 								logInfo("over here pose avi");
 							}*/
+						}
+						else
+						{
+							bzero = true;
+							zed.setSVOPosition(0);
+
+							zedimgnum=0;
+
+							jsonidx=0;
+							poseimgnum=0;
 						}
 
 					}

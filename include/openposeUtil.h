@@ -487,33 +487,7 @@ public:
 
 
 
-	void reinit()
-	{
-		stdsvo_File = "";
-
-		stdpose_data_Dir = "";
-
-		stdzed_avi_File = "";
-
-		stdpose_avi_File = "";
-
-
-		stdmerge_avi_File = "";
-
-		bshow = true;
-
-		bsavePose = true;
-
-		jsonidx = 0;
-
-
-		image_width = 720;
-		image_height = 405;
-
-		simage_width = 720;
-		simage_height = 405;
-
-	}
+	
 	std::string getpose_data_Dir()
 	{
 		if (stdpose_data_Dir.compare("") == 0)
@@ -534,10 +508,15 @@ public:
 	}
 
 
+	void reinit();
 
 protected:
 
+	bool bzero;
+
 	bool bshow;
+
+
 
 	bool bsaveSvo;
 
