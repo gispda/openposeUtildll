@@ -29,12 +29,7 @@ class MyWindow(QtWidgets.QWidget):
         print(fileName1,filetype)
 
 
-def click_startsavezedsvo():
-    #print("啊哈哈哈我终于成功了！")
-    _openposeUtil.zedservice_startSavezedSvo()
-def click_endSavezedsvo():
-    #print("啊哈哈哈我终于成功了！")
-    _openposeUtil.zedservice_endSavezedsvo()
+
 def click_connectVideo():
        
     
@@ -49,12 +44,36 @@ def click_connectVideo():
     
     svofiles=bytes("D:\\project\\ParatroopersTraining\\data\\svo.svo","gbk")    
     
-    myDll.startposeservice(svofiles)
+    myDll.startposeservice(svofiles,True)
+    
     print("----------------")
+    #myDll.detach()
     #pyResult=ctypes.string_at(result);
 	#print(pyResult.decode("gbk"))
 
     #_openposeUtil.zedservice_startposeservice('D:\\project\\ParatroopersTraining\\data\\222.svo')
+def click_getavi_file():
+    dll_name = "openposeutil.dll"
+    dllabspath = os.path.dirname(os.path.abspath(__file__)) + os.path.sep + dll_name
+    
+    myDll = ctypes.CDLL(dllabspath)
+    myDll.getposeavifile.argtypes=[]
+
+    myDll.getposeavifile.restype=ctypes.c_char_p
+    poseavi = myDll.getposeavifile()
+    print(poseavi)
+
+def click_getposedata():
+    dll_name = "openposeutil.dll"
+    dllabspath = os.path.dirname(os.path.abspath(__file__)) + os.path.sep + dll_name
+    
+    myDll = ctypes.CDLL(dllabspath)
+    myDll.getposedatadir.argtypes=[]
+
+    myDll.getposedatadir.restype=ctypes.c_char_p
+    poseavi = myDll.getposedatadir()
+    print(poseavi)
+
 def click_stopVideo():
     #print("啊哈哈哈我终于成功了！")
     dll_name = "openposeutil.dll"
@@ -65,6 +84,8 @@ def click_stopVideo():
     #myDll.endposeservice.argtypes = []
     myDll.endposeservice.restype = ctypes.c_void_p
     myDll.endposeservice()
+
+
     #_openposeUtil.zedservice_stopposeservice()
 #def click_startposeavi():
     #print("啊哈哈哈我终于成功了！")
@@ -100,12 +121,14 @@ def click_startmergeavi():
     myDll = ctypes.CDLL(dllabspath)
     
     myDll.startmergereportavi.argtypes = [ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
-    myDll.startmergereportavi.restype = ctypes.c_void_p
-    hkfiles=bytes("D:\\project\\ParatroopersTraining\\data\\ch0001_00000000507000106.mp4","gbk")   
-    svofiles=bytes("D:\\project\\ParatroopersTraining\\data\\222.svo","gbk")   
-    posefiles=bytes("D:\\project\\ParatroopersTraining\\openposeUtildll\\test\\2020080323130741.avi","gbk")   
-    datadir=bytes("D:\\project\\ParatroopersTraining\\openposeUtildll\\test\\2020080323130741\\","gbk")   
-    myDll.startmergereportavi(hkfiles,svofiles,posefiles,datadir)
+    myDll.startmergereportavi.restype = ctypes.c_char_p
+    hkfiles=bytes("D:\\project\\ParatroopersTraining\\data\\ch0001_00000001349000306.mp4","gbk")   
+    svofiles=bytes("D:\\project\\ParatroopersTraining\\data\\svo.svo","gbk")   
+    posefiles=bytes("D:\\project\\ParatroopersTraining\\openposeUtildll\\test\\2020090811011391.avi","gbk")   
+    datadir=bytes("D:\\project\\ParatroopersTraining\\openposeUtildll\\test\\2020090811011358\\","gbk")   
+    cmpfile = myDll.startmergereportavi(hkfiles,svofiles,posefiles,datadir,True)
+    
+    print(cmpfile)
     print("over")
 #def click_startrecordzedimg():
     #print("啊哈哈哈我终于成功了！")
@@ -120,5 +143,7 @@ if __name__ == '__main__':
     ui.pushButton_5.clicked.connect(click_connectVideo)
     ui.pushButton_6.clicked.connect(click_stopVideo)
     ui.pushButton_7.clicked.connect(click_startmergeavi)
+    ui.pushButton_8.clicked.connect(click_getavi_file)
+    ui.pushButton_9.clicked.connect(click_getposedata)
     sys.exit(app.exec_())
 

@@ -45,7 +45,7 @@ class SimLog
 public:
 	static SimLog& Instance();
 
-	void InitSimLog(std::string logger_name, std::string file_name, int log_level = spdlog::level::trace);
+	void InitSimLog(std::string logger_name, std::string file_name, bool broate = false,int log_level = spdlog::level::trace);
 
 	void EndLog();
 

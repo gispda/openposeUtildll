@@ -61,7 +61,7 @@ class openposeUtil
 public:
 	openposeUtil();
     ~openposeUtil();
-    void stopposeservice();
+	void stopposeservice();
 
 private:
     //  volatile bool stopped;
@@ -90,6 +90,7 @@ private:
 	sl::Camera zed;
 	sl::Pose camera_pose;
 	std::thread zed_callback, openpose_callback,savesvo_callback,saveposeavi_callback,savezedavi_callback;
+	//std::thread savesvo_callback, saveposeavi_callback, savezedavi_callback;
 	std::mutex data_in_mtx, data_out_mtx;
 	std::vector<op::Array<float>> netInputArray;
 	op::Array<float> poseKeypoints;
@@ -265,7 +266,7 @@ private:
 	}
 
 
-	////����pv0,pv1 �� pv2,pv3֮��ļнǣ������ƽ�淨����pv3������
+	////计算pv0,pv1 和 pv2,pv3之间的夹角，如果是平面法线则pv3不考虑
 	double calctwovectorang(int  vidx[4], sl::float4& pv0, sl::float4& pv1, sl::float4& pv2, sl::float4& pv3, std::map<int, sl::float4>& keypoints_position);
 
 	bool AssertVectorIsNAN(sl::float4& pv0);
@@ -352,7 +353,7 @@ public:
 	///启动姿态估计算法服务
 	////
 
-	void startposeservice(std::string svo_files);
+	void startposeservice(std::string svo_files, bool isshow = false);
 
 	
 
@@ -421,7 +422,7 @@ public:
 
 
 
-	std::string startmergereportavi(std::string hmavi_file, std::string zedsvo_file, std::string zedposeavi_file, std::string posedata_file);
+	std::string startmergereportavi(std::string hmavi_file, std::string zedsvo_file, std::string zedposeavi_file, std::string posedata_file, bool isshow = false);
 
 
 	void setmerge_avi_File(std::string _stdmerge_avi_File)
@@ -499,8 +500,19 @@ public:
 
 		stdmerge_avi_File = "";
 
+		bshow = true;
+
+		bsavePose = true;
 
 		jsonidx = 0;
+
+
+		image_width = 720;
+		image_height = 405;
+
+		simage_width = 720;
+		simage_height = 405;
+
 	}
 	std::string getpose_data_Dir()
 	{
@@ -524,6 +536,9 @@ public:
 
 
 protected:
+
+	bool bshow;
+
 	bool bsaveSvo;
 
 

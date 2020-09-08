@@ -1,6 +1,6 @@
 #define DLLEXPORT extern "C" __declspec(dllexport)
 #include "zedservice.h"
-
+#include "ostream"
 #include "stdio.h"
 
 DLLEXPORT wchar_t* sum(wchar_t *str, int b, float f) 
@@ -12,11 +12,36 @@ DLLEXPORT wchar_t* sum(wchar_t *str, int b, float f)
 }
 
 
-DLLEXPORT void startposeservice(char* str)
+DLLEXPORT char* getposeavifile()
+{
+	char* pfile = (char*)zedservice::getpose_avi_file().data();	
+	/*wchar_t szBuffer[400];
+	printf("pose avi in here111111111111");
+	swprintf(szBuffer, 402, L"%s", pfile);
+	printf("pose avi in here222222222");
+	wprintf(szBuffer);*/
+
+	return pfile;
+}
+
+DLLEXPORT char* getposedatadir()
+{
+	//char* pfile = (char*)zedservice::getpose_data_dir().data();
+	
+
+
+	char* pfile = (char*)zedservice::getpose_data_dir().data();
+	//wchar_t szBuffer[400];
+
+	//swprintf(szBuffer, 402, L"%s", pfile);
+	return pfile;
+}
+
+
+DLLEXPORT void startposeservice(char* str,bool isshow=false)
 {
 	std::string svofile(str);
-	zedservice::startposeservice(svofile);
-	
+	zedservice::startposeservice(svofile,isshow);
 }
 
 DLLEXPORT void endposeservice()
@@ -24,12 +49,15 @@ DLLEXPORT void endposeservice()
 	zedservice::stopposeservice();
 }
 
-DLLEXPORT void startmergereportavi(char* hmavi_file, char* zedsvo_file, char* zedposeavi_file, char* posedata_file)
+DLLEXPORT char* startmergereportavi(char* hmavi_file, char* zedsvo_file, char* zedposeavi_file, char* posedata_file, bool isshow = false)
 {
 	std::string s1(hmavi_file);
 	std::string s2(zedsvo_file);
 	std::string s3(zedposeavi_file);
 	std::string s4(posedata_file);
-	zedservice::startmergereportavi(s1, s2, s3, s4);
+
+	char* pfile = (char*)zedservice::startmergereportavi(s1, s2, s3, s4,isshow).data();
+
+	return pfile;
 }
 

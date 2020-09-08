@@ -29,23 +29,23 @@ public:
 	///////启动zed相机
 
 
-	static void startzeddevice();
+	//static void startzeddevice();
 
 	///////关闭zed相机
 
 
-	static void closezeddevice();
+	//static void closezeddevice();
 
 
 	//////////
 	///启动姿态估计算法服务
 	////
 
-	static void startposeservice(std::string svo_files);
+	static void startposeservice(std::string svo_files,bool isshow=false);
 	static void stopposeservice();
 
 	////只能跟随程序一起退出姿态估计算法服务
-	static void stoppposewithexitsys();
+	//static void stoppposewithexitsys();
 
 	/////采集svo视频文件
 	//static void startSavesvo();
@@ -53,13 +53,13 @@ public:
 
 
 	/////采集带姿态估计结果的视频文件，返回视频文件名和姿态估计文本结果的json目录名
-	static void startSaveposeavi();
-	static std::string endSaveposeavi();
+	//static void startSaveposeavi();
+	//static std::string endSaveposeavi();
 
 
 	/////采集zed相机的原始视频avi格式，返回视频文件名
-	static void startSavezedavi();
-	static std::string endSavezedavi();
+	//static void startSavezedavi();
+	//static std::string endSavezedavi();
 
 
 
@@ -67,40 +67,40 @@ public:
 	static std::string getzedcurimg();
 
 	////合成四宫格视频文件，分别输入海康视频，zed的avi格式原始视频，带姿态估计结果的视频，姿态估计结果的json文件的目录,返回四宫格的视频文件名
-	static std::string startmergereportavi(std::string hmavi_file, std::string zedsvo_file, std::string zedposeavi_file, std::string posedata_file);
+	static std::string startmergereportavi(std::string hmavi_file, std::string zedsvo_file, std::string zedposeavi_file, std::string posedata_file, bool isshow = false);
 
     /////启动在线zed相机启动姿态估计算法
-    static void startposeserviceonlinezed();
+   // static void startposeserviceonlinezed();
 
 
-	static void startSavezedSvo();
+	/*static void startSavezedSvo();
 	static std::string endSavezedSvo();
-    
+    */
 
 
 	///一次采集
-	static void startgetposeavidata();
+	//static void startgetposeavidata();
 
-	static void endgetposeavidata();
+	//static void endgetposeavidata();
 
     void deleteProcessingThread();
 	static openposeUtil* getCurZedservice();
 
 	//void configureptmainwindow(PTMainWindow* ppm);
 	void initLogParameter(int argc, char* arcgv[]);
-	int getlogging_level();
-	bool getdisable_multi_thread();
-	std::string getoutput_resolution();
-	std::string getmodel_folder();
-	std::string getwrite_json();
-	std::string getnet_resolution();
-	std::string getvideo();
-	std::string getimage_dir();
-	std::string getwrite_images();
-	std::string getwrite_video();
+	//int getlogging_level();
+	//bool getdisable_multi_thread();
+	//std::string getoutput_resolution();
+	//std::string getmodel_folder();
+	//std::string getwrite_json();
+	//std::string getnet_resolution();
+	//std::string getvideo();
+	//std::string getimage_dir();
+	//std::string getwrite_images();
+	//std::string getwrite_video();
 
 
-	void setlogging_level(int logging_level);
+	/*void setlogging_level(int logging_level);
 	void setdisable_multi_thread(bool disable_multi_thread);
 	void setoutput_resolution(std::string output_resolution);
 	void setmodel_folder(std::string model_folder);
@@ -109,18 +109,18 @@ public:
 	void setvideo(std::string video);
 	void setimage_dir(std::string image_dir);
 	void setwrite_images(std::string write_images);
-	void setwrite_video(std::string write_video);
+	void setwrite_video(std::string write_video);*/
 
 
 
 	
 
-	static void setsvoFIle(std::string _svofile);
+	//static void setsvoFIle(std::string _svofile);
 	//void logInfo(std::string info);
 public:
-	static std::string getsvo_file();
+	//static std::string getsvo_file();
 
-	static std::string getzedavi_file();
+	//static std::string getzedavi_file();
 	static std::string getpose_avi_file();
 	static std::string getpose_data_dir();
 

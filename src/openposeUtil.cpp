@@ -15,6 +15,7 @@
 #include "utils.hpp"
 
 #include "dirutil.h"
+//#include "vld.h"
 
 //#include "PTMainWindow.h"
 
@@ -205,7 +206,7 @@ openposeUtil::openposeUtil()
 
 	 //outputVideo = NULL;
 
-
+	bshow = true;
 
 
 	initDevice();
@@ -227,7 +228,7 @@ openposeUtil::openposeUtil()
 	//zedposedataimg = new cv::Mat[10];
 	builder.settings_["emitUTF8"] = true;
 
-	SimLog::Instance().InitSimLog("openpose", "openposeutilinfo.txt");
+	SimLog::Instance().InitSimLog("openpose", "openposeutilinfo.txt",true);
 } // openposeUtil constructor
 
 openposeUtil::~openposeUtil()
@@ -259,25 +260,63 @@ void openposeUtil::stopposeservice()
 	if (quit == true)
 	{
 		cout << "re stoped!!" << endl;
-		return;
+		return ;
 	}
 	
+
+
+	if (bsavePose)
+	{
+
+		bsavePose = false;
+
+		outposeVideo.release();
+
+		sl::sleep_ms(20);
+	}
+
 	quit = true;
 
 	cout << "start clean resource" << endl;
 	//viewer.exit();
 
-	if(bsavePose)
+	
+	cout << "over savepose avi res" << endl;
+
+
+
+	if (zed.isOpened())
 	{
 
-	bsavePose = false;
-	
-	outposeVideo.release();
-	 
-	sl::sleep_ms(2);
+		cout << "close zed " << endl;
+		zed.close();
+
+
+
+		//openpose_callback.detach();
+		///zed_callback.detach();
+
+
 	}
+	else
+		cout << "zed not need close" << endl;
+
+	/*if (openpose_callback.joinable())
+		openpose_callback.join();
+
+	if (zed_callback.joinable())
+		zed_callback.join();*/
 
 
+
+
+	//zed_callback.join();
+
+
+	cout << "over zed callback avi res" << endl;
+	///openpose_callback.join();
+
+	cout << "over openpose callback avi res" << endl;
 	//saveposeavi_callback.join();
 
 
@@ -286,19 +325,11 @@ void openposeUtil::stopposeservice()
 
 
 	
-	openpose_callback.join();
 
-	zed_callback.join();
 	//cout << "22233333333333" << endl;
 	
 
-	if (zed.isOpened())
-	{
-		cout << "close zed " << endl;
-		zed.close();
-	}
-	else
-		cout << "zed not need close" << endl;
+	
 
 
 	//cout << "11155555555555555555555555" << endl;
@@ -318,7 +349,10 @@ void openposeUtil::stopposeservice()
 
 
 	logInfo("over all pose avi");
+	//reinit();
 
+	//logInfo("over recording pose avi");
+	///return getpose_avi_File();
 
 
 	//cout << "fffffffffffffffffff" << endl;
@@ -646,7 +680,7 @@ void openposeUtil::startzedopenpose()
 {
 
 	quit = false;
-	zed_callback = std::thread(&openposeUtil::runzedopenpose, this);
+//	zed_callback = std::thread(&openposeUtil::runzedopenpose, this);
 }
 void openposeUtil::runzedopenpose()
 {
@@ -691,7 +725,7 @@ void openposeUtil::runzedopenpose()
 	int new_width, new_height;
 
 
-	image_size = zed.getCameraInformation().camera_resolution;
+	image_size = zed.getCameraInformation().camera_configuration.resolution;
 
 	new_width = image_size.width / 1;
 	new_height = image_size.height / 1;
@@ -1109,16 +1143,24 @@ bool openposeUtil::saveposeavi()
 
 	logInfo(image_height);
 	logInfo(image_width);
+
+
+	outposeVideo.release();
 	outposeVideo.open(getpose_avi_File(), VideoWriter::fourcc('F', 'M', 'P', '4'), 10, cv::Size(image_width, image_height), true);
 	//outzedVideo.open(getzed_avi_File(), VideoWriter::fourcc('F', 'M', 'P', '4'), 10, cv::Size(image_width, image_height), true);
 
 	if (!outposeVideo.isOpened())
 	{
 		logInfo("codec failed\n");
+
+		cout<<"codec failed\n"<<endl;
 		return false;
 	}
 	else
+	{
 		logInfo("create pose avi ");
+		cout << "create pose avi" << endl;
+	}
 	//fout.open(getpose_data_File().c_str(), std::ios::app);
 
 	///json_root["bodyposes"] = 111111;
@@ -1629,8 +1671,11 @@ void openposeUtil::mergeimg(cv::Mat & img1, cv::Mat & img2, cv::Mat & img3, cv::
 	//cv::waitKey(0);
 
 }
-std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::string zedsvo_file, std::string zedposeavi_file, std::string posedata_dir)
+std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::string zedsvo_file, std::string zedposeavi_file, std::string posedata_dir, bool isshow)
 {
+
+
+	bshow = isshow;
 	logInfo(hmavi_file);
 
 	logInfo(zedsvo_file);
@@ -1687,7 +1732,7 @@ std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::strin
 
 
 
-	image_size = zed.getCameraInformation().camera_resolution;
+	image_size = zed.getCameraInformation().camera_configuration.resolution;
 	new_width = image_size.width / 1;
 	new_height = image_size.height / 1;
 
@@ -1792,9 +1837,11 @@ std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::strin
 
 		cv::resize(simg1, img1, zedposeimg.size());
 
-		cv::imshow("test", simg2);
-
-		waitKey(10);
+		if (bshow)
+		{
+			cv::imshow("test", simg2);
+			waitKey(10);
+		}
 		//zedavicap.retrieve(simg2);
 
 
@@ -1819,8 +1866,13 @@ std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::strin
 		}
 		else
 			cout << "not need open videowarer---------" << endl;
-		//cv::imshow("Test", dst_img);
-		//waitKey(10);
+
+
+		if (bshow)
+		{
+			cv::imshow("Test", dst_img);
+			waitKey(10);
+		}
 		//logInfo("start one merge frame");
 		outmergeVideo.write(dst_img);
 
@@ -2240,10 +2292,24 @@ bool openposeUtil::initFloorZED(sl::Camera & zed) {
 
 void openposeUtil::startZED() {
 	quit = false;
+
+	
+	//zed_callback.detach();
+	
+	//std::thread zed_callback;
+	if (zed_callback.joinable())
+		zed_callback.join();
 	zed_callback = std::thread(&openposeUtil::runZed, this);
+	//zed_callback = std::thread(, this);
 }
 
 void openposeUtil::startOpenpose() {
+	//openpose_callback.detach();
+
+	//std::thread openpose_callback;
+	if (openpose_callback.joinable())
+		openpose_callback.join();
+
 	openpose_callback = std::thread(&openposeUtil::findpose, this);
 }
 
@@ -3165,11 +3231,9 @@ void openposeUtil::fill_ptcloud(sl::Mat & xyzrgba) {
 }
 
 void openposeUtil::runZed() {
-	sl::RuntimeParameters rt;
-	rt.enable_depth = 1;
-	rt.measure3D_reference_frame = sl::REFERENCE_FRAME::WORLD;
-
-	sl::Mat img_buffer, depth_img_buffer, depth_buffer, depth_buffer2;
+	
+	cout << "runzed in ..........." << endl;
+	sl::Mat depth_img_buffer, depth_buffer, depth_buffer2;
 	op::Array<float> outputArray, outputArray2;
 	cv::Mat inputImage, depthImage, inputImageRGBA, outputImage;
 
@@ -3184,7 +3248,7 @@ void openposeUtil::runZed() {
 	poseRenderer.initializationOnThread();
 
 	// Init
-	sl::Resolution image_resolution(image_width, image_height);
+	//sl::Resolution image_resolution(image_width, image_height);
 	imageSize = op::Point<int>{ image_width, image_height };
 	// Get desired scale sizes
 	std::vector<op::Point<int>> netInputSizes;
@@ -3199,7 +3263,7 @@ void openposeUtil::runZed() {
 	int new_width, new_height;
 
 
-	image_size = zed.getCameraInformation().camera_resolution;
+	image_size = zed.getCameraInformation().camera_configuration.resolution;
 	
 	new_width = image_size.width / 1;
 	new_height = image_size.height / 1;
@@ -3226,6 +3290,7 @@ void openposeUtil::runZed() {
 	int zzz = zed.getSVONumberOfFrames();
 	
 	cout << "zed frame is " << zzz << endl;
+	cout << bshow << endl;
 
 	int endnum = 0;
 	while (!quit) {
@@ -3234,6 +3299,8 @@ void openposeUtil::runZed() {
 			if (need_new_image) {
 				if (zed.grab() == ERROR_CODE::SUCCESS)
 				{
+
+
 
 					zed.retrieveImage(image_zed, VIEW::LEFT, MEM::CPU, new_image_size);
 					//zed.retrieveImage(img_buffer, VIEW::LEFT, sl::MEM::CPU, image_resolution);
@@ -3244,7 +3311,9 @@ void openposeUtil::runZed() {
 					data_out_mtx.unlock();
 
 
-
+					logInfo("zed svo files position is ");
+					logInfo(zed.getSVOPosition());
+					logInfo("over ");
 
 					//char key = (char)cv::waitKey(5);
 					//sl::sleep_ms(2);
@@ -3258,10 +3327,25 @@ void openposeUtil::runZed() {
 					//key = (char)cv::waitKey(5);
 
 				//	sl::sleep_ms(2);
+					//new
+					//try {
+					//	char* cplusplus = new char[20];
+					//}
+					//catch (const std::bad_alloc) {}
+
+					////malloc
+					//char* c = (char*)malloc(20 * sizeof(char));
 
 					if (!image_ocv.empty())
 					{
-						//cv::imshow("Image", image_ocv);
+
+						if (bshow)
+						{
+
+						//	cout << "show opencv"<< endl;
+							cv::imshow("Image", image_ocv);
+							cv::waitKey(5);
+						}
 						zedimgnum++;
 						cv::cvtColor(image_ocv, inputImage, cv::COLOR_RGBA2RGB);
 						//if (bsaveZed) {
@@ -3295,10 +3379,7 @@ void openposeUtil::runZed() {
 				}
 				else
 				{
-					if (endnum > 7)
-					{
-						stopposeservice();
-					}
+					
 					sl::sleep_ms(1);
 					endnum++;
 				}
@@ -3312,6 +3393,7 @@ void openposeUtil::runZed() {
 			{
 
 				//fill_people_ogl(poseKeypoints, depth_buffer2);
+				if(bsavePose)
 				calcmanpose(poseKeypoints, depth_buffer2);
 				//			viewer.update(peopleObj);
 
@@ -3362,9 +3444,17 @@ void openposeUtil::runZed() {
 
 						//logInfo("img channel is ");
 						//logInfo(outputImage.channels());
-						//cv::imshow("Pose", outputImage);
+
+						if (bshow)
+						{
+							//cout << "show opencv pose" << endl;
+							cv::imshow("Pose", outputImage);
+							sl::sleep_ms(1);
+						}
 						if (bsavePose) {
 
+
+							//cout << "write pose" << endl;
 							addmanpose();
 							jsonidx++;
 							poseimgnum++;
@@ -3375,6 +3465,22 @@ void openposeUtil::runZed() {
 							logInfo(outputImage.rows);*/
 							cv::resize(outputImage, rimg, cv::Size(simage_width, simage_height));
 							outposeVideo.write(rimg);
+
+
+							if (endnum > 7)
+							{
+
+								destroyAllWindows();
+
+								if (chrono_zed) {
+									//STOP_TIMER("ZED")
+									chrono_zed = false;
+								}
+							 stopposeservice();
+
+							}
+
+
 							//logInfo("---------------------------------------------");
 							//logInfo(image_width);
 							//logInfo(image_height);
@@ -3444,15 +3550,26 @@ void openposeUtil::runZed() {
 		
 		//cout << "sleep 1 ms"<<endl;
 	}
-	//destroyAllWindows();
+	destroyAllWindows();
 }
 
 void openposeUtil::closezeddevice()
 {
 }
 
-void openposeUtil::startposeservice(std::string svo_files)
+void openposeUtil::startposeservice(std::string svo_files, bool isshow)
 {
+
+	
+
+
+	
+
+	reinit();
+
+
+	bshow = isshow;
+
 	// Set configuration parameters for the ZED
 	InitParameters initParameters;
 	initParameters.camera_resolution = RESOLUTION::VGA;
@@ -3535,27 +3652,37 @@ void openposeUtil::startposeservice(std::string svo_files)
 	
 
 
-	bsavePose = true;
+	//bsavePose = true;
 	//logInfo("------------------------------------+++++");
 
 
-	int ii = VideoWriter::fourcc('M', 'J', 'P', 'G');
-	logInfo("++++++++++++++++++++++++++++++++++++");
+	//int ii = VideoWriter::fourcc('M', 'J', 'P', 'G');
+	//logInfo("++++++++++++++++++++++++++++++++++++");
 	//logInfo(ii);
 	//outputVideo = new VideoWriter(getpose_avi_File(), VideoWriter::fourcc('M','J','P','G'), 10, cv::Size(672, 376),true);
 
 	logInfo(image_height);
 	logInfo(image_width);
+
+
+
+	cout <<"pose avi size:"<< image_height << "x" << image_width << endl;
+	outposeVideo.release();
 	outposeVideo.open(getpose_avi_File(), VideoWriter::fourcc('F', 'M', 'P', '4'), 10, cv::Size(image_width, image_height), true);
 	//outzedVideo.open(getzed_avi_File(), VideoWriter::fourcc('F', 'M', 'P', '4'), 10, cv::Size(image_width, image_height), true);
 
 	if (!outposeVideo.isOpened())
 	{
 		logInfo("codec failed\n");
+		cout << "codec failed\n" << endl;
 		return;
 	}
 	else
+	{ 
 		logInfo("create pose avi ");
+		cout << "create pose avi" << endl;
+	}
+		
 	//saveposeavi_callback = std::thread(&openposeUtil::saveposeavi, this);
 	//logInfo("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
 	// Start ZED callback

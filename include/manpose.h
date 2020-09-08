@@ -31,6 +31,10 @@ struct Angle {
 	sl::float3 pos;
 
 	std::string desc;
+
+
+	double anglexoy;
+	double angleyoz;
 	//std::string  sdesc;
 };
 
