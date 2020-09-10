@@ -38,15 +38,22 @@ DLLEXPORT char* getposedatadir()
 }
 
 
-DLLEXPORT void startposeservice(char* str,bool isshow=false)
+DLLEXPORT char* startposeservice(char* str,bool isshow=false)
 {
 	std::string svofile(str);
-	zedservice::startposeservice(svofile,isshow);
+
+	char* resbuffer = (char*)zedservice::startposeservice(svofile,isshow).data();
+	return resbuffer;
 }
 
 DLLEXPORT void endposeservice()
 {
 	zedservice::stopposeservice();
+}
+
+DLLEXPORT bool isCreatePoseAvi()
+{
+	return zedservice::isCreatePoseAvi();
 }
 
 DLLEXPORT char* startmergereportavi(char* hmavi_file, char* zedsvo_file, char* zedposeavi_file, char* posedata_file, bool isshow = false)

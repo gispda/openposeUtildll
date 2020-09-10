@@ -170,10 +170,36 @@ void zedservice::initLogParameter(int argc, char* arcgv[])
 //	zedservice::getCurZedservice()->setwrite_video(write_video);
 //}
 
-void zedservice::startposeservice(std::string svo_files, bool isshow)
+std::string zedservice::startposeservice(std::string svo_files, bool isshow)
 {
 
+
+	string curdir = dirutil::GetCurrentWorkingDir();
+
 	zedservice::getCurZedservice()->startposeservice(svo_files,isshow);
+
+
+	
+	///string mergeavi = zedservice::getCurZedservice()->startmergereportavi(hmavi_file, zedsvo_file, zedposeavi_file, posedata_file, isshow);
+	string resbuffer;
+
+	string strint = calcInt();
+
+	resbuffer.append(strint);
+	resbuffer.append("#");
+	resbuffer.append("startposeservice");
+	resbuffer.append("#");
+	resbuffer.append(curdir).append("\\").append(zedservice::getCurZedservice()->getpose_avi_File());
+	resbuffer.append("#");
+	resbuffer.append(zedservice::getCurZedservice()->getpose_data_Dir());
+	return resbuffer;
+
+
+}
+
+bool zedservice::isCreatePoseAvi()
+{
+	return zedservice::getCurZedservice()->isCreatePoseAvi();
 }
 
 void zedservice::stopposeservice()
@@ -228,8 +254,17 @@ std::string zedservice::startmergereportavi(std::string hmavi_file, std::string 
 {
 
 	string curdir = dirutil::GetCurrentWorkingDir();
+	string mergeavi = zedservice::getCurZedservice()->startmergereportavi(hmavi_file, zedsvo_file, zedposeavi_file, posedata_file, isshow);
+	string resbuffer;
 
-	return curdir + "\\" + zedservice::getCurZedservice()->startmergereportavi(hmavi_file, zedsvo_file, zedposeavi_file, posedata_file,isshow);
+	string strint = calcInt();
+
+	resbuffer.append(strint);
+	resbuffer.append("#");
+	resbuffer.append("startmergereportavi");
+	resbuffer.append("#");
+	resbuffer.append(curdir).append("\\").append(mergeavi);
+	return resbuffer;
 }
 
 //void zedservice::setsvoFIle(std::string _svofile)

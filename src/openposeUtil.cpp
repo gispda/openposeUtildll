@@ -276,7 +276,7 @@ void openposeUtil::stopposeservice()
 	}
 
 	quit = true;
-
+	bcreateposeavi = true;
 	cout << "start clean resource" << endl;
 	//viewer.exit();
 
@@ -407,7 +407,7 @@ void openposeUtil::logInfo(bool info)
 
 
 
-void openposeUtil::logInfo(Angle angle)
+void openposeUtil::logInfo(AngleInfo angle)
 {
 	//std::string winfo;
 	//winfo.append(angle.desc);
@@ -415,7 +415,7 @@ void openposeUtil::logInfo(Angle angle)
 
 	std::string info;
 
-	info.append(angle.desc).append(":").append(floatTostring(angle.angle, 5)).append(" x,y:").append(floatTostring(angle.x, 5)).append(",").append(floatTostring(angle.y, 5)).append(" over");
+	info.append(angle.desc).append(":").append(floatTostring(angle.angle.angle, 5)).append(" x,y:").append(floatTostring(angle.x, 5)).append(",").append(floatTostring(angle.y, 5)).append(" over");
 
 	LDebug(info);
 }
@@ -509,7 +509,7 @@ void openposeUtil::initLogParameter(int argc, char* arcgv[])
 	//logInfo("一次初始化google logger");
 }
 
-void openposeUtil::drawText(cv::Mat * image, Angle angle, Body body)
+void openposeUtil::drawText(cv::Mat * image, AngleInfo angle, Body body)
 {
 	//image->setTo(cv::Scalar(100, 0, 0));
 
@@ -520,12 +520,12 @@ void openposeUtil::drawText(cv::Mat * image, Angle angle, Body body)
 
 
 	//将文本框居中绘制
-	if (isnan(angle.angle))
+	if (isnan(angle.angle.angle))
 	{
 		return;
 	}
 
-	text = doubleTostring(angle.angle, 8);
+	text = doubleTostring(angle.angle.angle, 8);
 
 
 
@@ -584,7 +584,7 @@ void openposeUtil::initDevice()
 
 	bool quit = false;
 
-
+	bcreateposeavi = false;
 	//	pptmainwindow = NULL;
 	_manpose = new manpose();
 
@@ -1188,7 +1188,7 @@ void openposeUtil::addmanpose()
 
 	Json::Value item;
 
-	Angle angle;
+	AngleInfo angle;
 
 	//Json::Valu
 
@@ -1197,7 +1197,9 @@ void openposeUtil::addmanpose()
 
 
 	item["LEFTRIGHT"] = "NONE";
-	item["angle"] = angle.angle;
+	item["angle"] = angle.angle.angle;
+	item["anglexoy"] = angle.angle.anglexoy;
+	item["angleyoz"] = angle.angle.angleyoz;
 	item["x"] = angle.x;
 	item["y"] = angle.y;
 	item["desc"] = angle.desc;
@@ -1213,7 +1215,9 @@ void openposeUtil::addmanpose()
 
 
 	item["LEFTRIGHT"] = "NONE";
-	item["angle"] = angle.angle;
+	item["angle"] = angle.angle.angle;
+	item["anglexoy"] = angle.angle.anglexoy;
+	item["angleyoz"] = angle.angle.angleyoz;
 	item["x"] = angle.x;
 	item["y"] = angle.y;
 	item["desc"] = angle.desc;
@@ -1224,7 +1228,9 @@ void openposeUtil::addmanpose()
 
 
 	item["LEFTRIGHT"] = "NONE";
-	item["angle"] = angle.angle;
+	item["angle"] = angle.angle.angle;
+	item["anglexoy"] = angle.angle.anglexoy;
+	item["angleyoz"] = angle.angle.angleyoz;
 	item["x"] = angle.x;
 	item["y"] = angle.y;
 	item["desc"] = angle.desc;
@@ -1235,7 +1241,9 @@ void openposeUtil::addmanpose()
 
 
 	item["LEFTRIGHT"] = "LEFT";
-	item["angle"] = angle.angle;
+	item["angle"] = angle.angle.angle;
+	item["anglexoy"] = angle.angle.anglexoy;
+	item["angleyoz"] = angle.angle.angleyoz;
 	item["x"] = angle.x;
 	item["y"] = angle.y;
 	item["desc"] = angle.desc;
@@ -1246,7 +1254,9 @@ void openposeUtil::addmanpose()
 
 
 	item["LEFTRIGHT"] = "RIGHT";
-	item["angle"] = angle.angle;
+	item["angle"] = angle.angle.angle;
+	item["anglexoy"] = angle.angle.anglexoy;
+	item["angleyoz"] = angle.angle.angleyoz;
 	item["x"] = angle.x;
 	item["y"] = angle.y;
 	item["desc"] = angle.desc;
@@ -1260,7 +1270,9 @@ void openposeUtil::addmanpose()
 
 
 	item["LEFTRIGHT"] = "LEFT";
-	item["angle"] = angle.angle;
+	item["angle"] = angle.angle.angle;
+	item["anglexoy"] = angle.angle.anglexoy;
+	item["angleyoz"] = angle.angle.angleyoz;
 	item["x"] = angle.x;
 	item["y"] = angle.y;
 	item["desc"] = angle.desc;
@@ -1271,7 +1283,9 @@ void openposeUtil::addmanpose()
 
 
 	item["LEFTRIGHT"] = "RIGHT";
-	item["angle"] = angle.angle;
+	item["angle"] = angle.angle.angle;
+	item["anglexoy"] = angle.angle.anglexoy;
+	item["angleyoz"] = angle.angle.angleyoz;
 	item["x"] = angle.x;
 	item["y"] = angle.y;
 	item["desc"] = angle.desc;
@@ -1285,7 +1299,9 @@ void openposeUtil::addmanpose()
 
 
 	item["LEFTRIGHT"] = "LEFT";
-	item["angle"] = angle.angle;
+	item["angle"] = angle.angle.angle;
+	item["anglexoy"] = angle.angle.anglexoy;
+	item["angleyoz"] = angle.angle.angleyoz;
 	item["x"] = angle.x;
 	item["y"] = angle.y;
 	item["desc"] = angle.desc;
@@ -1296,7 +1312,9 @@ void openposeUtil::addmanpose()
 
 
 	item["LEFTRIGHT"] = "RIGHT";
-	item["angle"] = angle.angle;
+	item["angle"] = angle.angle.angle;
+	item["anglexoy"] = angle.angle.anglexoy;
+	item["angleyoz"] = angle.angle.angleyoz;
 	item["x"] = angle.x;
 	item["y"] = angle.y;
 	item["desc"] = angle.desc;
@@ -1309,7 +1327,9 @@ void openposeUtil::addmanpose()
 
 
 	item["LEFTRIGHT"] = "LEFT";
-	item["angle"] = angle.angle;
+	item["angle"] = angle.angle.angle;
+	item["anglexoy"] = angle.angle.anglexoy;
+	item["angleyoz"] = angle.angle.angleyoz;
 	item["x"] = angle.x;
 	item["y"] = angle.y;
 	item["desc"] = angle.desc;
@@ -1320,7 +1340,9 @@ void openposeUtil::addmanpose()
 
 
 	item["LEFTRIGHT"] = "RIGHT";
-	item["angle"] = angle.angle;
+	item["angle"] = angle.angle.angle;
+	item["anglexoy"] = angle.angle.anglexoy;
+	item["angleyoz"] = angle.angle.angleyoz;
 	item["x"] = angle.x;
 	item["y"] = angle.y;
 	item["desc"] = angle.desc;
@@ -1333,7 +1355,9 @@ void openposeUtil::addmanpose()
 
 
 	item["LEFTRIGHT"] = "LEFT";
-	item["angle"] = angle.angle;
+	item["angle"] = angle.angle.angle;
+	item["anglexoy"] = angle.angle.anglexoy;
+	item["angleyoz"] = angle.angle.angleyoz;
 	item["x"] = angle.x;
 	item["y"] = angle.y;
 	item["desc"] = angle.desc;
@@ -1344,7 +1368,9 @@ void openposeUtil::addmanpose()
 
 
 	item["LEFTRIGHT"] = "RIGHT";
-	item["angle"] = angle.angle;
+	item["angle"] = angle.angle.angle;
+	item["anglexoy"] = angle.angle.anglexoy;
+	item["angleyoz"] = angle.angle.angleyoz;
 	item["x"] = angle.x;
 	item["y"] = angle.y;
 	item["desc"] = angle.desc;
@@ -1357,7 +1383,9 @@ void openposeUtil::addmanpose()
 
 
 	item["LEFTRIGHT"] = "LEFT";
-	item["angle"] = angle.angle;
+	item["angle"] = angle.angle.angle;
+	item["anglexoy"] = angle.angle.anglexoy;
+	item["angleyoz"] = angle.angle.angleyoz;
 	item["x"] = angle.x;
 	item["y"] = angle.y;
 	item["desc"] = angle.desc;
@@ -1368,7 +1396,9 @@ void openposeUtil::addmanpose()
 
 
 	item["LEFTRIGHT"] = "RIGHT";
-	item["angle"] = angle.angle;
+	item["angle"] = angle.angle.angle;
+	item["anglexoy"] = angle.angle.anglexoy;
+	item["angleyoz"] = angle.angle.angleyoz;
 	item["x"] = angle.x;
 	item["y"] = angle.y;
 	item["desc"] = angle.desc;
@@ -2042,9 +2072,9 @@ std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::strin
 //}
 
 
-std::list<Angle> openposeUtil::getAnglesFromonebodypose(Json::Value _json_bodypose)
+std::list<AngleInfo> openposeUtil::getAnglesFromonebodypose(Json::Value _json_bodypose)
 {
-	std::list<Angle> rs;
+	std::list<AngleInfo> rs;
 
 	//json_is.open(_json_file, std::ios::binary);
 	//if (json_reader.parse(json_is, json_root, FALSE))
@@ -2053,17 +2083,21 @@ std::list<Angle> openposeUtil::getAnglesFromonebodypose(Json::Value _json_bodypo
 	int file_size = _json_bodypose.size();  // 得到"files"的数组个数  
 	//std::wstring wsdesc;
 	std::string sdesc = "";
-	Angle angle;
+	AngleInfo angle;
 	for (int i = 0; i < file_size; ++i)  // 遍历数组  
 	{
 		Json::Value leftright = _json_bodypose[i]["LEFTRIGHT"];
 		double _angle = _json_bodypose[i]["angle"].asDouble();
+		double _anglexoy = _json_bodypose[i]["anglexoy"].asDouble();
+		double _angleyoz = _json_bodypose[i]["angleyoz"].asDouble();
 		int x = _json_bodypose[i]["x"].asInt();
 		int y = _json_bodypose[i]["y"].asInt();
 		sdesc = _json_bodypose[i]["desc"].asString();
 
 		//wsdesc = s2ws(sdesc);
-		angle.angle = _angle;
+		angle.angle.angle = _angle;
+		angle.angle.anglexoy = _anglexoy;
+		angle.angle.angleyoz = _angleyoz;
 		angle.x = x;
 		angle.y = y;
 		angle.desc = sdesc;
@@ -2074,7 +2108,7 @@ std::list<Angle> openposeUtil::getAnglesFromonebodypose(Json::Value _json_bodypo
 void openposeUtil::recalcposedatimg(Json::Value _json_bodypose)
 {
 
-	std::list<Angle> angls = getAnglesFromonebodypose(_json_bodypose);
+	std::list<AngleInfo> angls = getAnglesFromonebodypose(_json_bodypose);
 
 
 	zedposedataimg.release();
@@ -2084,7 +2118,7 @@ void openposeUtil::recalcposedatimg(Json::Value _json_bodypose)
 
 	int i = 0;
 	std::string angleinfo;
-	for (list <Angle> ::iterator it = angls.begin(); it != angls.end(); ++it)
+	for (list <AngleInfo> ::iterator it = angls.begin(); it != angls.end(); ++it)
 	{
 		logInfo(*it);
 		angleinfo = printangleinfo(*it);
@@ -2127,9 +2161,9 @@ std::list<Json::Value> openposeUtil::getbodyposesfromjsonfile(std::string _json_
 
 	return rs;
 }
-std::list<Angle> openposeUtil::fromjsonfile(std::string _json_file)
+std::list<AngleInfo> openposeUtil::fromjsonfile(std::string _json_file)
 {
-	std::list<Angle> rs;
+	std::list<AngleInfo> rs;
 
 	json_is.open(_json_file, std::ios::binary);
 
@@ -2148,18 +2182,22 @@ std::list<Angle> openposeUtil::fromjsonfile(std::string _json_file)
 		cout << file_size << endl;
 		//std::wstring wsdesc;
 		std::string sdesc = "";
-		Angle angle;
+		AngleInfo angle;
 		for (int i = 0; i < file_size; ++i)  // 遍历数组  
 		{
 		//	cout << "++++++++++++++++++++++sfsdfsdf" << endl;
 			Json::Value leftright = json_root["bodypose"][i]["LEFTRIGHT"];
 			double _angle = json_root["bodypose"][i]["angle"].asDouble();
+			double _anglexoy = json_root["bodypose"][i]["anglexoy"].asDouble();
+			double _angleyoz = json_root["bodypose"][i]["angleyoz"].asDouble();
 			int x = json_root["bodypose"][i]["x"].asInt();
 			int y = json_root["bodypose"][i]["y"].asInt();
 			sdesc = json_root["bodypose"][i]["desc"].asString();
 
 			//wsdesc = s2ws(sdesc);
-			angle.angle = _angle;
+			angle.angle.angle = _angle;
+			angle.angle.anglexoy = _anglexoy;
+			angle.angle.angleyoz = _angleyoz;
 			angle.x = x;
 			angle.y = y;
 			angle.desc = sdesc;
@@ -2191,7 +2229,7 @@ cv::Mat openposeUtil::fromjson(std::string json_file)
 	cout << json_file << endl;
 	cv::Mat textimg(image_height, image_width, CV_8UC3,Scalar(0, 0, 0));
 	//cout << "22222222222222222222222222" << endl;
-	std::list<Angle> posels = fromjsonfile(json_file);
+	std::list<AngleInfo> posels = fromjsonfile(json_file);
 	//cout << "3333333333333333333333333333333" << endl;
 	int anggount = posels.size();
 
@@ -2203,13 +2241,13 @@ cv::Mat openposeUtil::fromjson(std::string json_file)
 	int i = 0;
 	std::string angleinfo;
 	//cout << "1$$$$$$$$$$$$$$$$$$$$$$" << endl;
-	for (list <Angle> ::iterator it = posels.begin(); it != posels.end(); ++it)
+	for (list <AngleInfo> ::iterator it = posels.begin(); it != posels.end(); ++it)
 	{
 	//	logInfo(*it);
 		angleinfo = printangleinfo(*it);
 		drawText(&textimg, angleinfo, cv::Point(0, i * ydiv));
 		i++;
-	//	cout << "444444444444444444444444444444444" << endl;
+		cout <<"print angle:"<< angleinfo << endl;
 	}
 
 
@@ -2334,6 +2372,8 @@ void openposeUtil::reinit()
 
 	bzero = false;
 
+	bcreateposeavi = false;
+
 	jsonidx = 0;
 
 
@@ -2343,6 +2383,11 @@ void openposeUtil::reinit()
 	simage_width = 720;
 	simage_height = 405;
 
+}
+
+bool openposeUtil::isCreatePoseAvi()
+{
+	return bcreateposeavi;
 }
 
 void openposeUtil::findpose() {
@@ -2520,6 +2565,9 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 #endif
 		/////////////////////////// 
 		int cvx = 0, cvy = 0;
+		Angle _angle;
+
+		InitAngle(_angle);
 
 		sl::float4 pv0, pv1, pv2, pv3;
 		pv0 = sl::float4(NAN, NAN, NAN, 0);
@@ -2540,11 +2588,12 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 		logInfo("臀部上脊柱骨与地面平面法线的夹角 none_neckmidhip_plane");
 
 		logInfo(vidx);
-		_manpose->setang_midhip_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "臀部上脊柱骨与地面平面法线的夹角");
+		_angle = calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position);
+		_manpose->setang_midhip_plane_normal(_angle, cvx, cvy, "臀部上脊柱骨与地面平面法线的夹角");
 
 
 
-		logInfo(_manpose->getang_midhip_plane_normal());
+		//logInfo(_manpose->getang_midhip_plane_normal());
 		logInfo("臀部上脊柱骨与地面平面法线的夹角 none_neckmidhip_plane  over");
 
 		pv0 = sl::float4(NAN, NAN, NAN, 0);
@@ -2565,14 +2614,14 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 		logInfo("大腿与上身的夹角右 right_hipknee_to_midhip");
 
 		logInfo(vidx);
-
-
-		_manpose->setang_hipknee_midhip(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "大腿与上身的夹角右", BODY_RIGHT);
+		InitAngle(_angle);
+		_angle = calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position);
+		_manpose->setang_hipknee_midhip(_angle, cvx, cvy, "大腿与上身的夹角右", BODY_RIGHT);
 
 
 
 		logInfo("right_hipknee_to_midhip");
-		logInfo(_manpose->getang_hipknee_midhip(BODY_RIGHT));
+		//logInfo(_manpose->getang_hipknee_midhip(BODY_RIGHT));
 
 		logInfo("大腿与上身的夹角右 right_hipknee_to_midhip  over");
 
@@ -2594,14 +2643,14 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 		logInfo("大腿与上身的夹角左 right_hipknee_to_midhip");
 
 		logInfo(vidx);
-
-
-		_manpose->setang_hipknee_midhip(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "大腿与上身的夹角左", BODY_LEFT);
+		InitAngle(_angle);
+		_angle = calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position);
+		_manpose->setang_hipknee_midhip(_angle, cvx, cvy, "大腿与上身的夹角左", BODY_LEFT);
 
 
 
 		logInfo("left_hipknee_to_midhip");
-		logInfo(_manpose->getang_hipknee_midhip(BODY_LEFT));
+		//logInfo(_manpose->getang_hipknee_midhip(BODY_LEFT));
 
 		logInfo("大腿与上身的夹角左 right_hipknee_to_midhip over");
 
@@ -2627,12 +2676,14 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 
 		logInfo(vidx);
 
-		_manpose->setang_hipknee_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "大腿与地面平面法线的夹角右", BODY_RIGHT);
+		InitAngle(_angle);
+		_angle = calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position);
+		_manpose->setang_hipknee_plane_normal(_angle, cvx, cvy, "大腿与地面平面法线的夹角右", BODY_RIGHT);
 
 
 
 		logInfo("right_hipknee_plane");
-		logInfo(_manpose->getang_hipknee_plane_normal(BODY_RIGHT));
+		//logInfo(_manpose->getang_hipknee_plane_normal(BODY_RIGHT));
 
 		logInfo("大腿与地面平面法线的夹角右 right_hipknee_plane over");
 
@@ -2654,13 +2705,14 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 		logInfo("大腿与地面平面法线的夹角左 left_hipknee_plane");
 
 		logInfo(vidx);
-
-		_manpose->setang_hipknee_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "大腿与地面平面法线的夹角左", BODY_LEFT);
+		InitAngle(_angle);
+		_angle = calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position);
+		_manpose->setang_hipknee_plane_normal(_angle, cvx, cvy, "大腿与地面平面法线的夹角左", BODY_LEFT);
 
 
 
 		logInfo("left_hipknee_plane");
-		logInfo(_manpose->getang_hipknee_plane_normal(BODY_LEFT));
+		//logInfo(_manpose->getang_hipknee_plane_normal(BODY_LEFT));
 
 		logInfo("大腿与地面平面法线的夹角左 left_hipknee_plane over");
 
@@ -2687,12 +2739,14 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 
 		logInfo(vidx);
 
-		_manpose->setang_kneeankle_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "小腿与地面平面法线的夹角右", BODY_RIGHT);
+		InitAngle(_angle);
+		_angle = calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position);
+		_manpose->setang_kneeankle_plane_normal(_angle, cvx, cvy, "小腿与地面平面法线的夹角右", BODY_RIGHT);
 
 
 
 		logInfo("right_kneeankle_plane");
-		logInfo(_manpose->getang_kneeankle_plane_normal(BODY_RIGHT));
+		//logInfo(_manpose->getang_kneeankle_plane_normal(BODY_RIGHT));
 
 		logInfo("小腿与地面平面法线的夹角右 right_kneeankle_plane  over");
 
@@ -2716,14 +2770,16 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 		logInfo("小腿与地面平面法线的夹角左 left_kneeankle_plane");
 
 		logInfo(vidx);
+		InitAngle(_angle);
 
+		_angle = calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position);
 
-		_manpose->setang_kneeankle_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "小腿与地面平面法线的夹角左", BODY_LEFT);
+		_manpose->setang_kneeankle_plane_normal(_angle, cvx, cvy, "小腿与地面平面法线的夹角左", BODY_LEFT);
 
 
 
 		logInfo("left_kneeankle_plane");
-		logInfo(_manpose->getang_kneeankle_plane_normal(BODY_LEFT));
+		//logInfo(_manpose->getang_kneeankle_plane_normal(BODY_LEFT));
 
 		logInfo("小腿与地面平面法线的夹角左 left_kneeankle_plane  over");
 
@@ -2750,13 +2806,14 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 
 		logInfo(vidx);
 
-
-		_manpose->setang_kneeankle_hipknee(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "小腿与大腿的夹角右", BODY_RIGHT);
+		InitAngle(_angle);
+		_angle = calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position);
+		_manpose->setang_kneeankle_hipknee(_angle, cvx, cvy, "小腿与大腿的夹角右", BODY_RIGHT);
 
 
 
 		logInfo("right_kneeankle_hipknee");
-		logInfo(_manpose->getang_kneeankle_hipknee(BODY_RIGHT));
+		//logInfo(_manpose->getang_kneeankle_hipknee(BODY_RIGHT));
 
 		logInfo("小腿与大腿的夹角右 right_kneeankle_hipknee over");
 
@@ -2781,13 +2838,15 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 
 		logInfo(vidx);
 
+		InitAngle(_angle);
+		_angle = calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position);
 
-		_manpose->setang_kneeankle_hipknee(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "小腿与大腿的夹角左", BODY_LEFT);
+		_manpose->setang_kneeankle_hipknee(_angle, cvx, cvy, "小腿与大腿的夹角左", BODY_LEFT);
 
 
 
 		logInfo("left_kneeankle_hipknee");
-		logInfo(_manpose->getang_kneeankle_hipknee(BODY_LEFT));
+		//logInfo(_manpose->getang_kneeankle_hipknee(BODY_LEFT));
 
 		logInfo("小腿与大腿的夹角左 left_kneeankle_hipknee  over");
 
@@ -2812,14 +2871,16 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 		logInfo("踝关节与小腿的夹角右 right_anklebigtoe_kneeankle");
 
 		logInfo(vidx);
+		InitAngle(_angle);
+		_angle = calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position);
 
 
-		_manpose->setang_anklebigtoe_kneeankle(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "踝关节与小腿的夹角右", BODY_RIGHT);
+		_manpose->setang_anklebigtoe_kneeankle(_angle, cvx, cvy, "踝关节与小腿的夹角右", BODY_RIGHT);
 
 
 
 		logInfo("right_anklebigtoe_kneeankle");
-		logInfo(_manpose->getang_anklebigtoe_kneeankle(BODY_RIGHT));
+		//logInfo(_manpose->getang_anklebigtoe_kneeankle(BODY_RIGHT));
 
 
 		logInfo("踝关节与小腿的夹角右 right_anklebigtoe_kneeankle over");
@@ -2842,13 +2903,15 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 		logInfo("踝关节与小腿的夹角左 left_anklebigtoe_kneeankle");
 
 		logInfo(vidx);
+		InitAngle(_angle);
+		_angle = calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position);
 
-		_manpose->setang_anklebigtoe_kneeankle(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "踝关节与小腿的夹角左", BODY_LEFT);
+		_manpose->setang_anklebigtoe_kneeankle(_angle, cvx, cvy, "踝关节与小腿的夹角左", BODY_LEFT);
 
 
 
 		logInfo("left_anklebigtoe_kneeankle");
-		logInfo(_manpose->getang_anklebigtoe_kneeankle(BODY_LEFT));
+		//logInfo(_manpose->getang_anklebigtoe_kneeankle(BODY_LEFT));
 
 		logInfo("踝关节与小腿的夹角左 left_anklebigtoe_kneeankle over");
 
@@ -2873,14 +2936,16 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 		logInfo("踝关节与地面平面法线的夹角右 right_anklebigtoe_plane");
 
 		logInfo(vidx);
+		InitAngle(_angle);
+		_angle = calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position);
 
 
-		_manpose->setang_anklebigtoe_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "踝关节与地面平面法线的夹角右", BODY_RIGHT);
+		_manpose->setang_anklebigtoe_plane_normal(_angle, cvx, cvy, "踝关节与地面平面法线的夹角右", BODY_RIGHT);
 
 
 
 		logInfo("right_anklebigtoe_plane");
-		logInfo(_manpose->getang_anklebigtoe_plane_normal(BODY_RIGHT));
+		//logInfo(_manpose->getang_anklebigtoe_plane_normal(BODY_RIGHT));
 
 		logInfo("踝关节与地面平面法线的夹角右 right_anklebigtoe_plane over");
 
@@ -2902,13 +2967,15 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 		logInfo("踝关节与地面平面法线的夹角左 left_anklebigtoe_plane");
 
 		logInfo(vidx);
+		InitAngle(_angle);
+		_angle = calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position);
 
-		_manpose->setang_anklebigtoe_plane_normal(calctwovectorang(vidx, pv0, pv1, pv2, pv3, keypoints_position), cvx, cvy, "踝关节与地面平面法线的夹角左", BODY_LEFT);
+		_manpose->setang_anklebigtoe_plane_normal(_angle, cvx, cvy, "踝关节与地面平面法线的夹角左", BODY_LEFT);
 
 
 
 		logInfo("left_anklebigtoe_plane");
-		logInfo(_manpose->getang_anklebigtoe_plane_normal(BODY_LEFT));
+		//logInfo(_manpose->getang_anklebigtoe_plane_normal(BODY_LEFT));
 
 
 		logInfo("踝关节与地面平面法线的夹角左 left_anklebigtoe_plane over");
@@ -2927,6 +2994,13 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 
 
 
+}
+
+void openposeUtil::InitAngle(Angle& _angle)
+{
+	_angle.angle = NAN;
+	_angle.anglexoy = NAN;
+	_angle.angleyoz = NAN;
 }
 
 void openposeUtil::calcplaneangle(std::map<int, sl::float4> keypoints_position)
@@ -3037,16 +3111,16 @@ void openposeUtil::calcplaneangle(std::map<int, sl::float4> keypoints_position)
 }
 
 ////计算pv0,pv1 和 pv2,pv3之间的夹角，如果是平面法线则pv3不考虑
-double openposeUtil::calctwovectorang(int  vidx[4], sl::float4& pv0, sl::float4& pv1, sl::float4& pv2, sl::float4& pv3, std::map<int, sl::float4>& keypoints_position)
+Angle openposeUtil::calctwovectorang(int  vidx[4], sl::float4& pv0, sl::float4& pv1, sl::float4& pv2, sl::float4& pv3, std::map<int, sl::float4>& keypoints_position)
 {
 	sl::float3 pn;
 	////地板平面法线
 
 
 
+	Angle angle;
 
-
-
+	InitAngle(angle);
 	if (vidx[2] == 999 || vidx[3] == 1000)
 	{
 		pn = plane.getNormal();
@@ -3097,7 +3171,7 @@ double openposeUtil::calctwovectorang(int  vidx[4], sl::float4& pv0, sl::float4&
 	if (retflag == true)
 	{
 		logInfo("计算姿态角度时候向量没有初始化. ddddddddddddddddddddddddddddddd");
-		return NAN;
+		return angle;
 	}
 
 	sl::float4 v1 = pv0 - pv1;
@@ -3162,20 +3236,52 @@ double openposeUtil::calctwovectorang(int  vidx[4], sl::float4& pv0, sl::float4&
 	// "domain error" math exceptions.
 	dot = (dot < -1.0 ? -1.0 : (dot > 1.0 ? 1.0 : dot));
 	logInfo("dot1 is ");
-	logInfo(dot);
-	double angle = acos(dot);
+
+	double dotxoy = getdotproductxoy(v1u, v2u);
+	logInfo("dotxoy is ");
+	logInfo(dotxoy);
+	// Force the dot product of the two input vectors to
+	// fall within the domain for inverse cosine, which
+	// is -1 <= x <= 1. This will prevent runtime
+	// "domain error" math exceptions.
+	dotxoy = (dotxoy < -1.0 ? -1.0 : (dotxoy > 1.0 ? 1.0 : dotxoy));
+	logInfo("dot1xoy is ");
+
+
+
+	logInfo(dotxoy);
+	angle.anglexoy = acos(dotxoy) * 360 / (2 * M_PI);
+	double dotyoz = getdotproductyoz(v1u, v2u);
+	logInfo("dotyoz is ");
+	logInfo(dotyoz);
+	// Force the dot product of the two input vectors to
+	// fall within the domain for inverse cosine, which
+	// is -1 <= x <= 1. This will prevent runtime
+	// "domain error" math exceptions.
+	dotyoz = (dotyoz < -1.0 ? -1.0 : (dotyoz > 1.0 ? 1.0 : dotyoz));
+	logInfo("dot1yoz is ");
+
+
+
+	logInfo(dotyoz);
+	angle.anglexoy = acos(dotyoz) * 360 / (2 * M_PI);
+
+	double _angle;
+	_angle = acos(dot);
 
 
 	logInfo("arcangle is ");
-	logInfo(angle);
+	logInfo(_angle);
 	//double reang = (M_PI * 2) - angle;
 		//* reflex_angle = (ON_PI * 2) - angle;
 
 	logInfo("ang is ");
 	//logInfo(reang);
-	angle = angle * 360 / (2 * M_PI);
+	_angle = _angle * 360 / (2 * M_PI);
 
-	logInfo(angle);
+	logInfo(_angle);
+
+	angle.angle = _angle;
 	return angle;
 
 

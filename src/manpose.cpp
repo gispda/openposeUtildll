@@ -83,14 +83,14 @@ int manpose::getbody_part_index(string key, SecIdx secidx)
 	return ret;
 }
 
-Angle manpose::getang_plane1_left_right()
+AngleInfo manpose::getang_plane1_left_right()
 {
 	return ang_plane1_left_right;
 }
 
 void manpose::setang_plane1_left_right(double _ang_plane1_left_right, int _x, int _y, std::string _desc, sl::float3 _pos)
 {
-	ang_plane2_before_after.angle = _ang_plane1_left_right;
+	ang_plane2_before_after.angle.angle = _ang_plane1_left_right;
 	ang_plane2_before_after.x = _x;
 	ang_plane2_before_after.y = _y;
 	ang_plane2_before_after.desc = _desc;
@@ -98,26 +98,26 @@ void manpose::setang_plane1_left_right(double _ang_plane1_left_right, int _x, in
 
 }
 
-Angle manpose::getang_plane2_before_after()
+AngleInfo manpose::getang_plane2_before_after()
 {
 	return ang_plane2_before_after;
 }
 
 void manpose::setang_plane2_before_after(double _ang_plane2_before_after, int _x, int _y, std::string _desc,  sl::float3 _pos )
 {
-	ang_plane2_before_after.angle = _ang_plane2_before_after;
+	ang_plane2_before_after.angle.angle = _ang_plane2_before_after;
 	ang_plane2_before_after.x = _x;
 	ang_plane2_before_after.y = _y;
 	ang_plane2_before_after.desc = _desc;
 	ang_plane2_before_after.pos = _pos;
 }
 
-Angle manpose::getang_midhip_plane_normal()
+AngleInfo manpose::getang_midhip_plane_normal()
 {
 	return ang_midhip_plane_normal;
 }
 
-void manpose::setang_midhip_plane_normal(double _ang_midhip_plane_normal,int _x, int _y, std::string _desc, sl::float3 _pos )
+void manpose::setang_midhip_plane_normal(Angle _ang_midhip_plane_normal,int _x, int _y, std::string _desc, sl::float3 _pos )
 {
 	ang_midhip_plane_normal.angle = _ang_midhip_plane_normal;
 	ang_midhip_plane_normal.x = _x;
@@ -126,7 +126,7 @@ void manpose::setang_midhip_plane_normal(double _ang_midhip_plane_normal,int _x,
 	ang_midhip_plane_normal.pos = _pos;
 }
 
-Angle manpose::getang_hipknee_midhip(Body body)
+AngleInfo manpose::getang_hipknee_midhip(Body body)
 {
 	if(body == BODY_LEFT)
 	return ang_hipknee_midhip[0];
@@ -134,7 +134,7 @@ Angle manpose::getang_hipknee_midhip(Body body)
 	return ang_hipknee_midhip[1];
 }
 
-void manpose::setang_hipknee_midhip(double _ang_hipknee_midhip, int _x, int _y, std::string _desc, Body body, sl::float3 _pos)
+void manpose::setang_hipknee_midhip(Angle _ang_hipknee_midhip, int _x, int _y, std::string _desc, Body body, sl::float3 _pos)
 {
 
 	if (body == BODY_LEFT)
@@ -156,7 +156,7 @@ void manpose::setang_hipknee_midhip(double _ang_hipknee_midhip, int _x, int _y, 
 	}
 }
 
-Angle manpose::getang_hipknee_plane_normal(Body body)
+AngleInfo manpose::getang_hipknee_plane_normal(Body body)
 {
 	if (body == BODY_LEFT)
 		return ang_hipknee_plane_normal[0];
@@ -164,7 +164,7 @@ Angle manpose::getang_hipknee_plane_normal(Body body)
 		return ang_hipknee_plane_normal[1];
 }
 
-void manpose::setang_hipknee_plane_normal(double _ang_hipknee_plane_normal, int _x, int _y, std::string _desc, Body body, sl::float3 _pos )
+void manpose::setang_hipknee_plane_normal(Angle _ang_hipknee_plane_normal, int _x, int _y, std::string _desc, Body body, sl::float3 _pos )
 {
 
 	if (body == BODY_LEFT)
@@ -188,7 +188,7 @@ void manpose::setang_hipknee_plane_normal(double _ang_hipknee_plane_normal, int 
 	}
 }
 
-Angle manpose::getang_kneeankle_plane_normal(Body body)
+AngleInfo manpose::getang_kneeankle_plane_normal(Body body)
 {
 	if (body == BODY_LEFT)
 		return ang_kneeankle_plane_normal[0];
@@ -196,7 +196,7 @@ Angle manpose::getang_kneeankle_plane_normal(Body body)
 		return ang_kneeankle_plane_normal[1];
 }
 
-void manpose::setang_kneeankle_plane_normal(double _ang_kneeankle_plane_normal, int _x, int _y, std::string _desc, Body body, sl::float3 _pos)
+void manpose::setang_kneeankle_plane_normal(Angle _ang_kneeankle_plane_normal, int _x, int _y, std::string _desc, Body body, sl::float3 _pos)
 {
 
 	if (body == BODY_LEFT)
@@ -219,7 +219,7 @@ void manpose::setang_kneeankle_plane_normal(double _ang_kneeankle_plane_normal, 
 	}
 }
 
-Angle manpose::getang_kneeankle_hipknee(Body body)
+AngleInfo manpose::getang_kneeankle_hipknee(Body body)
 {
 	if (body == BODY_LEFT)
 		return ang_kneeankle_hipknee[0];
@@ -227,7 +227,7 @@ Angle manpose::getang_kneeankle_hipknee(Body body)
 		return ang_kneeankle_hipknee[1];
 }
 
-void manpose::setang_kneeankle_hipknee(double _ang_kneeankle_hipknee, int _x, int _y, std::string _desc, Body body, sl::float3 _pos )
+void manpose::setang_kneeankle_hipknee(Angle _ang_kneeankle_hipknee, int _x, int _y, std::string _desc, Body body, sl::float3 _pos )
 {
 
 	if (body == BODY_LEFT)
@@ -248,7 +248,7 @@ void manpose::setang_kneeankle_hipknee(double _ang_kneeankle_hipknee, int _x, in
 	}
 }
 
-Angle manpose::getang_anklebigtoe_kneeankle(Body body)
+AngleInfo manpose::getang_anklebigtoe_kneeankle(Body body)
 {
 	if (body == BODY_LEFT)
 		return ang_anklebigtoe_kneeankle[0];
@@ -256,7 +256,7 @@ Angle manpose::getang_anklebigtoe_kneeankle(Body body)
 		return ang_anklebigtoe_kneeankle[1];
 }
 
-void manpose::setang_anklebigtoe_kneeankle(double _ang_anklebigtoe_kneeankle, int _x, int _y, std::string _desc, Body body, sl::float3 _pos)
+void manpose::setang_anklebigtoe_kneeankle(Angle _ang_anklebigtoe_kneeankle, int _x, int _y, std::string _desc, Body body, sl::float3 _pos)
 {
 
 	if (body == BODY_LEFT)
@@ -277,7 +277,7 @@ void manpose::setang_anklebigtoe_kneeankle(double _ang_anklebigtoe_kneeankle, in
 	}
 }
 
-Angle manpose::getang_anklebigtoe_plane_normal(Body body)
+AngleInfo manpose::getang_anklebigtoe_plane_normal(Body body)
 {
 	if (body == BODY_LEFT)
 		return ang_anklebigtoe_plane_normal[0];
@@ -285,7 +285,7 @@ Angle manpose::getang_anklebigtoe_plane_normal(Body body)
 		return ang_anklebigtoe_plane_normal[1];
 }
 
-void manpose::setang_anklebigtoe_plane_normal(double _ang_anklebigtoe_plane_normal, int _x, int _y, std::string _desc, Body body, sl::float3 _pos )
+void manpose::setang_anklebigtoe_plane_normal(Angle _ang_anklebigtoe_plane_normal, int _x, int _y, std::string _desc, Body body, sl::float3 _pos )
 {
 
 	if (body == BODY_LEFT)

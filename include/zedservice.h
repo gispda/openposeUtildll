@@ -12,6 +12,8 @@
 //#include <opencv/highgui.h>
 #include <xstring>
 
+#include <time.h>
+
 class openposeUtil;
 ///class PTMainWindow;
 class zedservice
@@ -41,7 +43,8 @@ public:
 	///启动姿态估计算法服务
 	////
 
-	static void startposeservice(std::string svo_files,bool isshow=false);
+	static std::string startposeservice(std::string svo_files,bool isshow=false);
+	static bool isCreatePoseAvi();
 	static void stopposeservice();
 
 	////只能跟随程序一起退出姿态估计算法服务
@@ -124,10 +127,23 @@ public:
 	static std::string getpose_avi_file();
 	static std::string getpose_data_dir();
 
+	static std::string  calcInt()
+	{
+		time_t nowtime = time(NULL);
+		struct tm* l = localtime(&nowtime);
+		char buf[128];
 
+		//int randnum = random(0, 99);
+		snprintf(buf, sizeof(buf), "%04d%02d%02d%02d%02d%02d", l->tm_year + 1900, l->tm_mon + 1, l->tm_mday, l->tm_hour, l->tm_min, l->tm_sec);
+		std::string s(buf);
+		return s;
+	}
 
 private:
     int imageSize;
+
+	int mergeint =1;
+	int poseint = 1;
 };
 
 

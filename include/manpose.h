@@ -21,9 +21,14 @@ using namespace std;
 enum Body {
 	BODY_LEFT=1,BODY_RIGHT=0
 };
-
 struct Angle {
 	double angle;
+	double anglexoy;
+	double angleyoz;
+};
+
+struct AngleInfo {
+	Angle angle;
 
 	int x;
 	int y;
@@ -33,8 +38,8 @@ struct Angle {
 	std::string desc;
 
 
-	double anglexoy;
-	double angleyoz;
+	//double anglexoy;
+	//double angleyoz;
 	//std::string  sdesc;
 };
 
@@ -77,84 +82,84 @@ private:
 
 	////臀部上脊柱骨与地面平面法线的夹角
 	////1(颈部),8(臀部上脊柱骨)  
-	Angle ang_midhip_plane_normal;
+	AngleInfo ang_midhip_plane_normal;
 
 
 
 	////大腿与上身的夹角
 	////9(臀部),10（膝盖）(右)12,13（左） to 1,8
 	////[0]为身体右面的，[1]为身体左面的
-	Angle ang_hipknee_midhip[2];
+	AngleInfo ang_hipknee_midhip[2];
 	
 
 	////大腿与地面平面法线的夹角
 	////9(臀部),10（膝盖）(右)12,13（左） 
 	////[0]为身体右面的，[1]为身体左面的
-	Angle ang_hipknee_plane_normal[2];
+	AngleInfo ang_hipknee_plane_normal[2];
 	
 
 	////小腿与地面平面法线的夹角
 	////10（膝盖）,11(踝关节)(右)13,14（左） 
 	////[0]为身体右面的，[1]为身体左面的
-	Angle ang_kneeankle_plane_normal[2];
+	AngleInfo ang_kneeankle_plane_normal[2];
 
 
 	////小腿与大腿的夹角
 	////10（膝盖）,11(踝关节)(右) to 9(臀部),10（膝盖）;13,14（左） to 12,13（左）
 	////[0]为身体右面的，[1]为身体左面的
-	Angle ang_kneeankle_hipknee[2];
+	AngleInfo ang_kneeankle_hipknee[2];
 	
 	////踝关节与小腿的夹角
 	////22（大脚趾）,11(踝关节)(右) to 10（膝盖）,11(踝关节);19,14（左） to 14,13（左）
 	////[0]为身体右面的，[1]为身体左面的
-	Angle ang_anklebigtoe_kneeankle[2];
+	AngleInfo ang_anklebigtoe_kneeankle[2];
 
 
 	////踝关节与地面平面法线的夹角
 	////22（大脚趾）,11(踝关节)(右) ;19,14（左） 
 	////[0]为身体右面的，[1]为身体左面的
-	Angle ang_anklebigtoe_plane_normal[2];
+	AngleInfo ang_anklebigtoe_plane_normal[2];
 
 
 
 
-	Angle ang_plane1_left_right;
+	AngleInfo ang_plane1_left_right;
 	
 
-	Angle ang_plane2_before_after;
+	AngleInfo ang_plane2_before_after;
 public:
-	Angle getang_plane1_left_right();
+	AngleInfo getang_plane1_left_right();
 	void setang_plane1_left_right(double _ang_plane1_left_right,int _x,int _y, std::string _desc,sl::float3 _pos=sl::float3(NAN,NAN,NAN));
 
-	Angle getang_plane2_before_after();
+	AngleInfo getang_plane2_before_after();
 	void setang_plane2_before_after(double _ang_plane2_before_after, int _x, int _y, std::string _desc, sl::float3 _pos = sl::float3(NAN, NAN, NAN));
 
 
-	Angle getang_midhip_plane_normal();
-	void setang_midhip_plane_normal(double _ang_midhip_plane_normal, int _x, int _y, std::string _desc, sl::float3 _pos = sl::float3(NAN, NAN, NAN));
+	AngleInfo getang_midhip_plane_normal();
+	void setang_midhip_plane_normal(Angle _ang_midhip_plane_normal, int _x, int _y, std::string _desc, sl::float3 _pos = sl::float3(NAN, NAN, NAN));
 
-	Angle getang_hipknee_midhip(Body body = BODY_LEFT);
-	void setang_hipknee_midhip(double _ang_hipknee_midhip,  int _x, int _y, std::string _desc, Body body = BODY_LEFT, sl::float3 _pos = sl::float3(NAN, NAN, NAN));
-
-
-
-	Angle getang_hipknee_plane_normal(Body body = BODY_LEFT);
-	void setang_hipknee_plane_normal(double _ang_hipknee_plane_normal, int _x, int _y, std::string _desc, Body body = BODY_LEFT, sl::float3 _pos = sl::float3(NAN, NAN, NAN));
-
-	Angle getang_kneeankle_plane_normal(Body body = BODY_LEFT);
-	void setang_kneeankle_plane_normal(double _ang_kneeankle_plane_normal, int _x, int _y, std::string _desc, Body body = BODY_LEFT, sl::float3 _pos = sl::float3(NAN, NAN, NAN));
-
-
-	Angle getang_kneeankle_hipknee(Body body = BODY_LEFT);
-	void setang_kneeankle_hipknee(double _ang_kneeankle_hipknee, int _x, int _y, std::string _desc, Body body = BODY_LEFT, sl::float3 _pos = sl::float3(NAN, NAN, NAN));
+	AngleInfo getang_hipknee_midhip(Body body = BODY_LEFT);
+	void setang_hipknee_midhip(Angle _ang_hipknee_midhip,  int _x, int _y, std::string _desc, Body body = BODY_LEFT, sl::float3 _pos = sl::float3(NAN, NAN, NAN));
 
 
 
+	AngleInfo getang_hipknee_plane_normal(Body body = BODY_LEFT);
+	void setang_hipknee_plane_normal(Angle _ang_hipknee_plane_normal, int _x, int _y, std::string _desc, Body body = BODY_LEFT, sl::float3 _pos = sl::float3(NAN, NAN, NAN));
 
-	Angle getang_anklebigtoe_kneeankle(Body body = BODY_LEFT);
-	void setang_anklebigtoe_kneeankle(double _ang_anklebigtoe_kneeankle, int _x, int _y, std::string _desc, Body body = BODY_LEFT, sl::float3 _pos = sl::float3(NAN, NAN, NAN));
-	Angle getang_anklebigtoe_plane_normal(Body body = BODY_LEFT);
-	void setang_anklebigtoe_plane_normal(double _ang_anklebigtoe_plane_normal, int _x, int _y, std::string _desc, Body body = BODY_LEFT, sl::float3 _pos = sl::float3(NAN, NAN, NAN));
+	AngleInfo getang_kneeankle_plane_normal(Body body = BODY_LEFT);
+	void setang_kneeankle_plane_normal(Angle _ang_kneeankle_plane_normal, int _x, int _y, std::string _desc, Body body = BODY_LEFT, sl::float3 _pos = sl::float3(NAN, NAN, NAN));
+
+
+	AngleInfo getang_kneeankle_hipknee(Body body = BODY_LEFT);
+	void setang_kneeankle_hipknee(Angle _ang_kneeankle_hipknee, int _x, int _y, std::string _desc, Body body = BODY_LEFT, sl::float3 _pos = sl::float3(NAN, NAN, NAN));
+
+
+
+
+	AngleInfo getang_anklebigtoe_kneeankle(Body body = BODY_LEFT);
+	void setang_anklebigtoe_kneeankle(Angle _ang_anklebigtoe_kneeankle, int _x, int _y, std::string _desc, Body body = BODY_LEFT, sl::float3 _pos = sl::float3(NAN, NAN, NAN));
+	AngleInfo getang_anklebigtoe_plane_normal(Body body = BODY_LEFT);
+	void setang_anklebigtoe_plane_normal(Angle _ang_anklebigtoe_plane_normal, int _x, int _y, std::string _desc, Body body = BODY_LEFT, sl::float3 _pos = sl::float3(NAN, NAN, NAN));
 };
 
 #endif

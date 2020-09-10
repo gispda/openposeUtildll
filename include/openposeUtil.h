@@ -161,15 +161,19 @@ private:
 	//{ poseModel, FLAGS_openpose_root_dir + FLAGS_model_folder, FLAGS_num_gpu_start, {}, op::ScaleMode::ZeroToOne, 1 };
 
 
-	std::string printangleinfo(Angle& angle)
+	std::string printangleinfo(AngleInfo& angle)
 	{
 	  std::string info;
 
-	  info.append(angle.desc).append(":").append(floatTostring(angle.angle, 5));
+	  info.append(angle.desc).append(":").append(floatTostring(angle.angle.angle, 5));
+	  info.append(" 平面角度:");
+	  info.append(floatTostring(angle.angle.anglexoy,5));
+	  info.append(" 矢角度:");
+	  info.append(floatTostring(angle.angle.angleyoz,5));
 	  return info;
 	}
 
-	std::list<Angle> openposeUtil::getAnglesFromonebodypose(Json::Value _json_bodypose);
+	std::list<AngleInfo> openposeUtil::getAnglesFromonebodypose(Json::Value _json_bodypose);
 
 	void recalcposedatimg(Json::Value _json_bodypose);
 
@@ -185,7 +189,7 @@ private:
 	}
 
 	std::list<Json::Value> getbodyposesfromjsonfile(std::string _json_file);
-	std::list<Angle> fromjsonfile(std::string _json_file);
+	std::list<AngleInfo> fromjsonfile(std::string _json_file);
 
 	// Sample functions
 	void startZED();
@@ -195,13 +199,15 @@ private:
 	void findpose();
 
 
-	void drawText(cv::Mat* image,Angle angle, Body body=BODY_RIGHT);
+	void drawText(cv::Mat* image,AngleInfo angle, Body body=BODY_RIGHT);
 
 	void drawText(cv::Mat* image, std::string _text, cv::Point origin);
 	void initDevice();
 	void fill_people_ogl(op::Array<float>& poseKeypoints, sl::Mat& xyz);
 	//// ����õ�ϵͳ��Ҫ�ĸ��ֽǶ�
 	void calcmanpose(op::Array<float>& poseKeypoints, sl::Mat& xyz);
+
+	void InitAngle(Angle& _angle);
 
 
 	void calcplaneangle(std::map<int, sl::float4> keypoints_position);
@@ -253,6 +259,20 @@ private:
 	
 	}
 
+	double getdotproductyoz(sl::float4 v1, sl::float4 v2)
+	{
+		double ret = v1.y * v2.y + v1.z * v2.z;
+		return ret;
+
+	}
+	double getdotproductxoy(sl::float4 v1, sl::float4 v2)
+	{
+		double ret = v1.x * v2.x + v1.y * v2.y;
+		return ret;
+
+	}
+
+
 	std::string  getNowTime()
 	{
 		time_t nowtime = time(NULL);
@@ -267,7 +287,7 @@ private:
 
 
 	////计算pv0,pv1 和 pv2,pv3之间的夹角，如果是平面法线则pv3不考虑
-	double calctwovectorang(int  vidx[4], sl::float4& pv0, sl::float4& pv1, sl::float4& pv2, sl::float4& pv3, std::map<int, sl::float4>& keypoints_position);
+	Angle calctwovectorang(int  vidx[4], sl::float4& pv0, sl::float4& pv1, sl::float4& pv2, sl::float4& pv3, std::map<int, sl::float4>& keypoints_position);
 
 	bool AssertVectorIsNAN(sl::float4& pv0);
 
@@ -326,7 +346,7 @@ public:
 
 	//void logInfo(std::string info);
 	
-	void logInfo(Angle angle);
+	void logInfo(AngleInfo angle);
 	void logInfo(char* info);
 
 	void logInfo(sl::float3 info);
@@ -510,9 +530,13 @@ public:
 
 	void reinit();
 
+
+	bool isCreatePoseAvi();
 protected:
 
 	bool bzero;
+
+	bool bcreateposeavi;
 
 	bool bshow;
 
