@@ -95,6 +95,8 @@ void manpose::setang_plane1_left_right(double _ang_plane1_left_right, int _x, in
 	ang_plane2_before_after.y = _y;
 	ang_plane2_before_after.desc = _desc;
 	ang_plane2_before_after.pos = _pos;
+	ang_plane2_before_after.descxoy = " 平面角度";
+	ang_plane2_before_after.descyoz = " 矢角度";
 
 }
 
@@ -110,6 +112,9 @@ void manpose::setang_plane2_before_after(double _ang_plane2_before_after, int _x
 	ang_plane2_before_after.y = _y;
 	ang_plane2_before_after.desc = _desc;
 	ang_plane2_before_after.pos = _pos;
+	ang_plane2_before_after.descxoy = " 平面角度";
+	ang_plane2_before_after.descyoz = " 矢角度";
+
 }
 
 AngleInfo manpose::getang_midhip_plane_normal()
@@ -124,6 +129,9 @@ void manpose::setang_midhip_plane_normal(Angle _ang_midhip_plane_normal,int _x, 
 	ang_midhip_plane_normal.y = _y;
 	ang_midhip_plane_normal.desc = _desc;
 	ang_midhip_plane_normal.pos = _pos;
+	ang_midhip_plane_normal.descxoy = " 平面角度";
+	ang_midhip_plane_normal.descyoz = " 矢角度";
+
 }
 
 AngleInfo manpose::getang_hipknee_midhip(Body body)
@@ -144,7 +152,8 @@ void manpose::setang_hipknee_midhip(Angle _ang_hipknee_midhip, int _x, int _y, s
 		ang_hipknee_midhip[0].y = _y;
 		ang_hipknee_midhip[0].desc = _desc;
 		ang_hipknee_midhip[0].pos = _pos;
-
+		ang_hipknee_midhip[0].descxoy = " 平面角度";
+		ang_hipknee_midhip[0].descyoz = " 矢角度";
 	}
 	else if (body == BODY_RIGHT)
 	{
@@ -153,6 +162,8 @@ void manpose::setang_hipknee_midhip(Angle _ang_hipknee_midhip, int _x, int _y, s
 		ang_hipknee_midhip[1].y = _y;
 		ang_hipknee_midhip[1].desc = _desc;
 		ang_hipknee_midhip[1].pos = _pos;
+		ang_hipknee_midhip[1].descxoy = " 平面角度";
+		ang_hipknee_midhip[1].descyoz = " 矢角度";
 	}
 }
 
@@ -174,7 +185,8 @@ void manpose::setang_hipknee_plane_normal(Angle _ang_hipknee_plane_normal, int _
 		ang_hipknee_plane_normal[0].y = _y;
 		ang_hipknee_plane_normal[0].desc = _desc;
 		ang_hipknee_plane_normal[0].pos = _pos;
-
+		ang_hipknee_plane_normal[0].descxoy = " 平面角度";
+		ang_hipknee_plane_normal[0].descyoz = " 矢角度";
 
 	}
 	else if (body == BODY_RIGHT)
@@ -184,7 +196,8 @@ void manpose::setang_hipknee_plane_normal(Angle _ang_hipknee_plane_normal, int _
 		ang_hipknee_plane_normal[1].y = _y;
 		ang_hipknee_plane_normal[1].desc = _desc;
 		ang_hipknee_plane_normal[1].pos = _pos;
-
+		ang_hipknee_plane_normal[1].descxoy = " 平面角度";
+		ang_hipknee_plane_normal[1].descyoz = " 矢角度";
 	}
 }
 
@@ -206,7 +219,8 @@ void manpose::setang_kneeankle_plane_normal(Angle _ang_kneeankle_plane_normal, i
 		ang_kneeankle_plane_normal[0].y = _y;
 		ang_kneeankle_plane_normal[0].desc = _desc;
 		ang_kneeankle_plane_normal[0].pos = _pos;
-
+		ang_kneeankle_plane_normal[0].descxoy = " 平面角度";
+		ang_kneeankle_plane_normal[0].descyoz = " 矢角度";
 	}
 	else if (body == BODY_RIGHT)
 	{
@@ -215,7 +229,8 @@ void manpose::setang_kneeankle_plane_normal(Angle _ang_kneeankle_plane_normal, i
 		ang_kneeankle_plane_normal[1].y = _y;
 		ang_kneeankle_plane_normal[1].desc = _desc;
 		ang_kneeankle_plane_normal[1].pos = _pos;
-
+		ang_kneeankle_plane_normal[1].descxoy = " 平面角度";
+		ang_kneeankle_plane_normal[1].descyoz = " 矢角度";
 	}
 }
 
@@ -237,6 +252,9 @@ void manpose::setang_kneeankle_hipknee(Angle _ang_kneeankle_hipknee, int _x, int
 		ang_kneeankle_hipknee[0].y = _y;
 		ang_kneeankle_hipknee[0].desc = _desc;
 		ang_kneeankle_hipknee[0].pos = _pos;
+
+		ang_kneeankle_hipknee[0].descxoy = " 平面角度";
+		ang_kneeankle_hipknee[0].descyoz = " 矢角度";
 	}
 	else if (body == BODY_RIGHT)
 	{
@@ -245,6 +263,9 @@ void manpose::setang_kneeankle_hipknee(Angle _ang_kneeankle_hipknee, int _x, int
 		ang_kneeankle_hipknee[1].y = _y;
 		ang_kneeankle_hipknee[1].desc = _desc;
 		ang_kneeankle_hipknee[1].pos = _pos;
+		ang_kneeankle_hipknee[1].descxoy = " 平面角度";
+		ang_kneeankle_hipknee[1].descyoz = " 矢角度";
+
 	}
 }
 
@@ -266,6 +287,9 @@ void manpose::setang_anklebigtoe_kneeankle(Angle _ang_anklebigtoe_kneeankle, int
 		ang_anklebigtoe_kneeankle[0].y = _y;
 		ang_anklebigtoe_kneeankle[0].desc = _desc;
 		ang_anklebigtoe_kneeankle[0].pos = _pos;
+
+		ang_anklebigtoe_kneeankle[0].descxoy = " 平面角度";
+		ang_anklebigtoe_kneeankle[0].descyoz = " 矢角度";
 	}
 	else if (body == BODY_RIGHT)
 	{
@@ -274,6 +298,9 @@ void manpose::setang_anklebigtoe_kneeankle(Angle _ang_anklebigtoe_kneeankle, int
 		ang_anklebigtoe_kneeankle[1].y = _y;
 		ang_anklebigtoe_kneeankle[1].desc = _desc;
 		ang_anklebigtoe_kneeankle[1].pos = _pos;
+
+		ang_anklebigtoe_kneeankle[1].descxoy = " 平面角度";
+		ang_anklebigtoe_kneeankle[1].descyoz = " 矢角度";
 	}
 }
 
@@ -295,6 +322,9 @@ void manpose::setang_anklebigtoe_plane_normal(Angle _ang_anklebigtoe_plane_norma
 		ang_anklebigtoe_plane_normal[0].y = _y;
 		ang_anklebigtoe_plane_normal[0].desc = _desc;
 		ang_anklebigtoe_plane_normal[0].pos = _pos;
+
+		ang_anklebigtoe_plane_normal[0].descxoy = " 平面角度";
+		ang_anklebigtoe_plane_normal[0].descyoz = " 矢角度";
 	}
 	else if (body == BODY_RIGHT)
 	{
@@ -303,5 +333,8 @@ void manpose::setang_anklebigtoe_plane_normal(Angle _ang_anklebigtoe_plane_norma
 		ang_anklebigtoe_plane_normal[1].y = _y;
 		ang_anklebigtoe_plane_normal[1].desc = _desc;
 		ang_anklebigtoe_plane_normal[1].pos = _pos;
+
+		ang_anklebigtoe_plane_normal[1].descxoy = " 平面角度";
+		ang_anklebigtoe_plane_normal[1].descyoz = " 矢角度";
 	}
 }

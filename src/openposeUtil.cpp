@@ -1196,6 +1196,9 @@ void openposeUtil::addmanpose()
 
 
 
+	
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{	
 	item["LEFTRIGHT"] = "NONE";
 	item["angle"] = angle.angle.angle;
 	item["anglexoy"] = angle.angle.anglexoy;
@@ -1203,208 +1206,259 @@ void openposeUtil::addmanpose()
 	item["x"] = angle.x;
 	item["y"] = angle.y;
 	item["desc"] = angle.desc;
+	item["descxoy"] = angle.descxoy;
+	item["descyoz"] = angle.descyoz;
 
+	array.append(item); // append()以数组的形式添加
+	}
 
 	//item["px"] = angle.pos.x;
 	//item["py"] = angle.pos.y;
 	//item["pz"] = angle.pos.z;
 
-	array.append(item); // append()以数组的形式添加
+	
 
 	angle = _manpose->getang_plane2_before_after();
 
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "NONE";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
 
-	item["LEFTRIGHT"] = "NONE";
-	item["angle"] = angle.angle.angle;
-	item["anglexoy"] = angle.angle.anglexoy;
-	item["angleyoz"] = angle.angle.angleyoz;
-	item["x"] = angle.x;
-	item["y"] = angle.y;
-	item["desc"] = angle.desc;
-
-	array.append(item); // append()以数组的形式添加
+		array.append(item); // append()以数组的形式添加
+	}
+	
 
 	angle = _manpose->getang_midhip_plane_normal();
 
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "NONE";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
 
-	item["LEFTRIGHT"] = "NONE";
-	item["angle"] = angle.angle.angle;
-	item["anglexoy"] = angle.angle.anglexoy;
-	item["angleyoz"] = angle.angle.angleyoz;
-	item["x"] = angle.x;
-	item["y"] = angle.y;
-	item["desc"] = angle.desc;
-
-	array.append(item); // append()以数组的形式添加
-
+		array.append(item); // append()以数组的形式添加
+	}
 	angle = _manpose->getang_hipknee_midhip(BODY_LEFT);
 
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "LEFT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
 
-	item["LEFTRIGHT"] = "LEFT";
-	item["angle"] = angle.angle.angle;
-	item["anglexoy"] = angle.angle.anglexoy;
-	item["angleyoz"] = angle.angle.angleyoz;
-	item["x"] = angle.x;
-	item["y"] = angle.y;
-	item["desc"] = angle.desc;
-
-	array.append(item); // append()以数组的形式添加
-
+		array.append(item); // append()以数组的形式添加
+	}
 	angle = _manpose->getang_hipknee_midhip(BODY_RIGHT);
 
 
-	item["LEFTRIGHT"] = "RIGHT";
-	item["angle"] = angle.angle.angle;
-	item["anglexoy"] = angle.angle.anglexoy;
-	item["angleyoz"] = angle.angle.angleyoz;
-	item["x"] = angle.x;
-	item["y"] = angle.y;
-	item["desc"] = angle.desc;
 
-	array.append(item); // append()以数组的形式添加
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "RIGHT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
 
+		array.append(item); // append()以数组的形式添加
+	}
 	//----------------------------------------
 
 
 	angle = _manpose->getang_hipknee_plane_normal(BODY_LEFT);
 
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "LEFT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
 
-	item["LEFTRIGHT"] = "LEFT";
-	item["angle"] = angle.angle.angle;
-	item["anglexoy"] = angle.angle.anglexoy;
-	item["angleyoz"] = angle.angle.angleyoz;
-	item["x"] = angle.x;
-	item["y"] = angle.y;
-	item["desc"] = angle.desc;
-
-	array.append(item); // append()以数组的形式添加
-
+		array.append(item); // append()以数组的形式添加
+	}
 	angle = _manpose->getang_hipknee_plane_normal(BODY_RIGHT);
 
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "RIGHT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
 
-	item["LEFTRIGHT"] = "RIGHT";
-	item["angle"] = angle.angle.angle;
-	item["anglexoy"] = angle.angle.anglexoy;
-	item["angleyoz"] = angle.angle.angleyoz;
-	item["x"] = angle.x;
-	item["y"] = angle.y;
-	item["desc"] = angle.desc;
-
-	array.append(item); // append()以数组的形式添加
-
+		array.append(item); // append()以数组的形式添加
+	}
 	//---------------------------------
 
 
 	angle = _manpose->getang_kneeankle_plane_normal(BODY_LEFT);
 
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "LEFT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
 
-	item["LEFTRIGHT"] = "LEFT";
-	item["angle"] = angle.angle.angle;
-	item["anglexoy"] = angle.angle.anglexoy;
-	item["angleyoz"] = angle.angle.angleyoz;
-	item["x"] = angle.x;
-	item["y"] = angle.y;
-	item["desc"] = angle.desc;
-
-	array.append(item); // append()以数组的形式添加
-
+		array.append(item); // append()以数组的形式添加
+	}
 	angle = _manpose->getang_kneeankle_plane_normal(BODY_RIGHT);
 
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "RIGHT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
 
-	item["LEFTRIGHT"] = "RIGHT";
-	item["angle"] = angle.angle.angle;
-	item["anglexoy"] = angle.angle.anglexoy;
-	item["angleyoz"] = angle.angle.angleyoz;
-	item["x"] = angle.x;
-	item["y"] = angle.y;
-	item["desc"] = angle.desc;
-
-	array.append(item); // append()以数组的形式添加
-
+		array.append(item); // append()以数组的形式添加
+	}
 	//---------------------------------
 
 	angle = _manpose->getang_kneeankle_hipknee(BODY_LEFT);
 
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "LEFT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
 
-	item["LEFTRIGHT"] = "LEFT";
-	item["angle"] = angle.angle.angle;
-	item["anglexoy"] = angle.angle.anglexoy;
-	item["angleyoz"] = angle.angle.angleyoz;
-	item["x"] = angle.x;
-	item["y"] = angle.y;
-	item["desc"] = angle.desc;
-
-	array.append(item); // append()以数组的形式添加
-
+		array.append(item); // append()以数组的形式添加
+	}
 	angle = _manpose->getang_kneeankle_hipknee(BODY_RIGHT);
 
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "RIGHT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
 
-	item["LEFTRIGHT"] = "RIGHT";
-	item["angle"] = angle.angle.angle;
-	item["anglexoy"] = angle.angle.anglexoy;
-	item["angleyoz"] = angle.angle.angleyoz;
-	item["x"] = angle.x;
-	item["y"] = angle.y;
-	item["desc"] = angle.desc;
-
-	array.append(item); // append()以数组的形式添加
-
+		array.append(item); // append()以数组的形式添加
+	}
 	//---------------------------------
 
 	angle = _manpose->getang_anklebigtoe_kneeankle(BODY_LEFT);
 
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "LEFT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
 
-	item["LEFTRIGHT"] = "LEFT";
-	item["angle"] = angle.angle.angle;
-	item["anglexoy"] = angle.angle.anglexoy;
-	item["angleyoz"] = angle.angle.angleyoz;
-	item["x"] = angle.x;
-	item["y"] = angle.y;
-	item["desc"] = angle.desc;
-
-	array.append(item); // append()以数组的形式添加
-
+		array.append(item); // append()以数组的形式添加
+	}
 	angle = _manpose->getang_anklebigtoe_kneeankle(BODY_RIGHT);
 
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "RIGHT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
 
-	item["LEFTRIGHT"] = "RIGHT";
-	item["angle"] = angle.angle.angle;
-	item["anglexoy"] = angle.angle.anglexoy;
-	item["angleyoz"] = angle.angle.angleyoz;
-	item["x"] = angle.x;
-	item["y"] = angle.y;
-	item["desc"] = angle.desc;
-
-	array.append(item); // append()以数组的形式添加
-
+		array.append(item); // append()以数组的形式添加
+	}
 	//---------------------------------
 
 	angle = _manpose->getang_anklebigtoe_plane_normal(BODY_LEFT);
 
 
-	item["LEFTRIGHT"] = "LEFT";
-	item["angle"] = angle.angle.angle;
-	item["anglexoy"] = angle.angle.anglexoy;
-	item["angleyoz"] = angle.angle.angleyoz;
-	item["x"] = angle.x;
-	item["y"] = angle.y;
-	item["desc"] = angle.desc;
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "LEFT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
 
-	array.append(item); // append()以数组的形式添加
-
+		array.append(item); // append()以数组的形式添加
+	}
 	angle = _manpose->getang_anklebigtoe_plane_normal(BODY_RIGHT);
 
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "RIGHT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
 
-	item["LEFTRIGHT"] = "RIGHT";
-	item["angle"] = angle.angle.angle;
-	item["anglexoy"] = angle.angle.anglexoy;
-	item["angleyoz"] = angle.angle.angleyoz;
-	item["x"] = angle.x;
-	item["y"] = angle.y;
-	item["desc"] = angle.desc;
-
-	array.append(item); // append()以数组的形式添加
-
+		array.append(item); // append()以数组的形式添加
+	}
 	//---------------------------------
 
 
@@ -2182,6 +2236,9 @@ std::list<AngleInfo> openposeUtil::fromjsonfile(std::string _json_file)
 		cout << file_size << endl;
 		//std::wstring wsdesc;
 		std::string sdesc = "";
+		std::string sdescxoy = "";
+		std::string sdescyoz = "";
+
 		AngleInfo angle;
 		for (int i = 0; i < file_size; ++i)  // 遍历数组  
 		{
@@ -2193,6 +2250,8 @@ std::list<AngleInfo> openposeUtil::fromjsonfile(std::string _json_file)
 			int x = json_root["bodypose"][i]["x"].asInt();
 			int y = json_root["bodypose"][i]["y"].asInt();
 			sdesc = json_root["bodypose"][i]["desc"].asString();
+			sdescxoy = json_root["bodypose"][i]["descxoy"].asString();
+			sdescyoz = json_root["bodypose"][i]["descyoz"].asString();
 
 			//wsdesc = s2ws(sdesc);
 			angle.angle.angle = _angle;
@@ -2201,6 +2260,8 @@ std::list<AngleInfo> openposeUtil::fromjsonfile(std::string _json_file)
 			angle.x = x;
 			angle.y = y;
 			angle.desc = sdesc;
+			angle.descxoy = sdescxoy;
+			angle.descyoz = sdescyoz;
 			rs.emplace_back(angle);
 
 		}
@@ -2237,6 +2298,8 @@ cv::Mat openposeUtil::fromjson(std::string json_file)
 	int ydiv = 0;
 	if (anggount != 0)
 		ydiv = image_height / anggount;
+	else
+		cout << "-----------------zero-------------" << endl;
 
 	int i = 0;
 	std::string angleinfo;
@@ -3236,36 +3299,6 @@ Angle openposeUtil::calctwovectorang(int  vidx[4], sl::float4& pv0, sl::float4& 
 	// "domain error" math exceptions.
 	dot = (dot < -1.0 ? -1.0 : (dot > 1.0 ? 1.0 : dot));
 	logInfo("dot1 is ");
-
-	double dotxoy = getdotproductxoy(v1u, v2u);
-	logInfo("dotxoy is ");
-	logInfo(dotxoy);
-	// Force the dot product of the two input vectors to
-	// fall within the domain for inverse cosine, which
-	// is -1 <= x <= 1. This will prevent runtime
-	// "domain error" math exceptions.
-	dotxoy = (dotxoy < -1.0 ? -1.0 : (dotxoy > 1.0 ? 1.0 : dotxoy));
-	logInfo("dot1xoy is ");
-
-
-
-	logInfo(dotxoy);
-	angle.anglexoy = acos(dotxoy) * 360 / (2 * M_PI);
-	double dotyoz = getdotproductyoz(v1u, v2u);
-	logInfo("dotyoz is ");
-	logInfo(dotyoz);
-	// Force the dot product of the two input vectors to
-	// fall within the domain for inverse cosine, which
-	// is -1 <= x <= 1. This will prevent runtime
-	// "domain error" math exceptions.
-	dotyoz = (dotyoz < -1.0 ? -1.0 : (dotyoz > 1.0 ? 1.0 : dotyoz));
-	logInfo("dot1yoz is ");
-
-
-
-	logInfo(dotyoz);
-	angle.anglexoy = acos(dotyoz) * 360 / (2 * M_PI);
-
 	double _angle;
 	_angle = acos(dot);
 
@@ -3282,6 +3315,49 @@ Angle openposeUtil::calctwovectorang(int  vidx[4], sl::float4& pv0, sl::float4& 
 	logInfo(_angle);
 
 	angle.angle = _angle;
+
+
+
+
+	double dotxoy = getdotproductxoy(v1u, v2u);
+	logInfo("dotxoy is ");
+	logInfo(dotxoy);
+	// Force the dot product of the two input vectors to
+	// fall within the domain for inverse cosine, which
+	// is -1 <= x <= 1. This will prevent runtime
+	// "domain error" math exceptions.
+	dotxoy = (dotxoy < -1.0 ? -1.0 : (dotxoy > 1.0 ? 1.0 : dotxoy));
+	logInfo("dot1xoy is ");
+
+
+
+	logInfo(dotxoy);
+
+	_angle = acos(dotxoy);
+
+	angle.anglexoy = _angle * 360 / (2 * M_PI);
+
+	double dotyoz = getdotproductyoz(v1u, v2u);
+	logInfo("dotyoz is ");
+	logInfo(dotyoz);
+	// Force the dot product of the two input vectors to
+	// fall within the domain for inverse cosine, which
+	// is -1 <= x <= 1. This will prevent runtime
+	// "domain error" math exceptions.
+	dotyoz = (dotyoz < -1.0 ? -1.0 : (dotyoz > 1.0 ? 1.0 : dotyoz));
+	logInfo("dot1yoz is ");
+
+
+
+	logInfo(dotyoz);
+
+	_angle = acos(dotyoz);
+
+	angle.angleyoz = _angle * 360 / (2 * M_PI);
+
+	
+
+	
 	return angle;
 
 

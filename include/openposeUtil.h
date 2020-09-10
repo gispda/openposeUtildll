@@ -166,9 +166,9 @@ private:
 	  std::string info;
 
 	  info.append(angle.desc).append(":").append(floatTostring(angle.angle.angle, 5));
-	  info.append(" 平面角度:");
+	  info.append(angle.descxoy);
 	  info.append(floatTostring(angle.angle.anglexoy,5));
-	  info.append(" 矢角度:");
+	  info.append(angle.descyoz);
 	  info.append(floatTostring(angle.angle.angleyoz,5));
 	  return info;
 	}

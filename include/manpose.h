@@ -37,6 +37,8 @@ struct AngleInfo {
 
 	std::string desc;
 
+	std::string descxoy;
+	std::string descyoz;
 
 	//double anglexoy;
 	//double angleyoz;
