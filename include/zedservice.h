@@ -44,7 +44,10 @@ public:
 	////
 
 	static std::string startposeservice(std::string svo_files,bool isshow=false);
-	static bool isCreatePoseAvi();
+	static bool isPoseAviFinished();
+
+	static bool isComposeAviFinished();
+
 	static void stopposeservice();
 
 	////只能跟随程序一起退出姿态估计算法服务

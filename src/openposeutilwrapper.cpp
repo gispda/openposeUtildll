@@ -51,9 +51,16 @@ DLLEXPORT void endposeservice()
 	zedservice::stopposeservice();
 }
 
-DLLEXPORT bool isCreatePoseAvi()
+DLLEXPORT bool isposeavifinished()
 {
-	return zedservice::isCreatePoseAvi();
+	return zedservice::isPoseAviFinished();
+}
+
+
+
+DLLEXPORT bool iscomposeavifinished()
+{
+	return zedservice::isComposeAviFinished();
 }
 
 DLLEXPORT char* startmergereportavi(char* hmavi_file, char* zedsvo_file, char* zedposeavi_file, char* posedata_file, bool isshow = false)

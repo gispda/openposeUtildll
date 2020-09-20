@@ -39,13 +39,14 @@ def click_connectVideo():
     myDll = ctypes.CDLL(dllabspath)
     
     myDll.startposeservice.argtypes = [ctypes.c_char_p]
-    myDll.startposeservice.restype = ctypes.c_void_p
+    myDll.startposeservice.restype = ctypes.c_char_p
     
     
     svofiles=bytes("D:\\project\\ParatroopersTraining\\data\\svo.svo","gbk")    
     
-    myDll.startposeservice(svofiles,True)
+    resbuf = myDll.startposeservice(svofiles,True)
     
+    print(resbuf)
     print("----------------")
     #myDll.detach()
     #pyResult=ctypes.string_at(result);
@@ -124,12 +125,41 @@ def click_startmergeavi():
     myDll.startmergereportavi.restype = ctypes.c_char_p
     hkfiles=bytes("D:\\project\\ParatroopersTraining\\data\\ch0001_00000001349000306.mp4","gbk")   
     svofiles=bytes("D:\\project\\ParatroopersTraining\\data\\svo.svo","gbk")   
-    posefiles=bytes("D:\\project\\ParatroopersTraining\\openposeUtildll\\test\\2020090811011391.avi","gbk")   
-    datadir=bytes("D:\\project\\ParatroopersTraining\\openposeUtildll\\test\\2020090811011358\\","gbk")   
+    posefiles=bytes("D:\\project\\ParatroopersTraining\\openposeUtildll\\test\\2020091018384843.avi","gbk")   
+    datadir=bytes("D:\\project\\ParatroopersTraining\\openposeUtildll\\test\\2020091018384830\\","gbk")   
     cmpfile = myDll.startmergereportavi(hkfiles,svofiles,posefiles,datadir,True)
     
     print(cmpfile)
     print("over")
+def click_isposeavifinished():
+    
+    dll_name = "openposeutil.dll"
+    dllabspath = os.path.dirname(os.path.abspath(__file__)) + os.path.sep + dll_name
+    
+    myDll = ctypes.CDLL(dllabspath)
+    
+    #myDll.isposeavifinished.argtypes = [ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
+    myDll.isposeavifinished.restype = ctypes.c_bool
+    bposeavifinished = myDll.isposeavifinished()
+    
+    print(bposeavifinished)
+    print("over")
+
+def click_iscomposeavifinished():
+    
+    dll_name = "openposeutil.dll"
+    dllabspath = os.path.dirname(os.path.abspath(__file__)) + os.path.sep + dll_name
+    
+    myDll = ctypes.CDLL(dllabspath)
+    
+    #myDll.isposeavifinished.argtypes = [ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p,ctypes.c_char_p]
+    myDll.iscomposeavifinished.restype = ctypes.c_bool
+    bcomposeavifinished = myDll.iscomposeavifinished()
+    
+    print(bcomposeavifinished)
+    print("over")    
+    #_openposeUtil.zedservice_getzedcurimg()
+
 #def click_startrecordzedimg():
     #print("啊哈哈哈我终于成功了！")
     #_openposeUtil.zedservice_getzedcurimg()
@@ -145,5 +175,8 @@ if __name__ == '__main__':
     ui.pushButton_7.clicked.connect(click_startmergeavi)
     ui.pushButton_8.clicked.connect(click_getavi_file)
     ui.pushButton_9.clicked.connect(click_getposedata)
+    ui.pushButton_10.clicked.connect(click_isposeavifinished)
+    ui.pushButton_11.clicked.connect(click_iscomposeavifinished)
+    
     sys.exit(app.exec_())
 

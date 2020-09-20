@@ -531,12 +531,16 @@ public:
 	void reinit();
 
 
-	bool isCreatePoseAvi();
+	bool isPoseAviFinished();
+
+	bool isComposeaviFinished();
 protected:
 
 	bool bzero;
 
-	bool bcreateposeavi;
+	bool bposeavifinished;
+
+	bool bcomposeavifinished;
 
 	bool bshow;
 

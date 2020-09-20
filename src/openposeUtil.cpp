@@ -276,7 +276,7 @@ void openposeUtil::stopposeservice()
 	}
 
 	quit = true;
-	bcreateposeavi = true;
+	bposeavifinished = true;
 	cout << "start clean resource" << endl;
 	//viewer.exit();
 
@@ -584,7 +584,9 @@ void openposeUtil::initDevice()
 
 	bool quit = false;
 
-	bcreateposeavi = false;
+	bposeavifinished = false;
+
+	bcomposeavifinished = false;
 	//	pptmainwindow = NULL;
 	_manpose = new manpose();
 
@@ -1982,6 +1984,8 @@ std::string openposeUtil::startmergereportavi(std::string hmavi_file, std::strin
 	jsonnum = 0;
 	//mergeimg(cv::Mat & img1, cv::Mat & img2, cv::Mat & img3, cv::Mat & img4)
 	// Load 4 images from the disk
+
+	bcomposeavifinished = true;
 	logInfo("over merge avi");
 	return getmerge_avi_File();
 }
@@ -2435,7 +2439,9 @@ void openposeUtil::reinit()
 
 	bzero = false;
 
-	bcreateposeavi = false;
+	bposeavifinished = false;
+
+	bcomposeavifinished = false;
 
 	jsonidx = 0;
 
@@ -2448,9 +2454,14 @@ void openposeUtil::reinit()
 
 }
 
-bool openposeUtil::isCreatePoseAvi()
+bool openposeUtil::isPoseAviFinished()
 {
-	return bcreateposeavi;
+	return bposeavifinished;
+}
+
+bool openposeUtil::isComposeaviFinished()
+{
+	return bcomposeavifinished;
 }
 
 void openposeUtil::findpose() {

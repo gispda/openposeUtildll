@@ -197,9 +197,14 @@ std::string zedservice::startposeservice(std::string svo_files, bool isshow)
 
 }
 
-bool zedservice::isCreatePoseAvi()
+bool zedservice::isPoseAviFinished()
 {
-	return zedservice::getCurZedservice()->isCreatePoseAvi();
+	return zedservice::getCurZedservice()->isPoseAviFinished();
+}
+
+bool zedservice::isComposeAviFinished()
+{
+	return zedservice::getCurZedservice()->isComposeaviFinished();
 }
 
 void zedservice::stopposeservice()
