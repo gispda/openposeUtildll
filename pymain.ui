@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>900</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>100</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>采集zed视频</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>90</y>
+      <width>131</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>停止采集zed视频</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_3">
+    <property name="geometry">
+     <rect>
+      <x>14</x>
+      <y>200</y>
+      <width>131</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>录制姿态分析</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_4">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>200</y>
+      <width>131</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>停止采集姿态分析</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_5">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>150</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>姿态分析启动</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_6">
+    <property name="geometry">
+     <rect>
+      <x>184</x>
+      <y>150</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>停止姿态分析</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_7">
+    <property name="geometry">
+     <rect>
+      <x>344</x>
+      <y>150</y>
+      <width>191</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>合成四宫格</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_8">
+    <property name="geometry">
+     <rect>
+      <x>344</x>
+      <y>200</y>
+      <width>191</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>采集图片</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_9">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>20</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_10">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>80</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_11">
+    <property name="geometry">
+     <rect>
+      <x>800</x>
+      <y>20</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_12">
+    <property name="geometry">
+     <rect>
+      <x>800</x>
+      <y>80</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PushButton</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>900</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
