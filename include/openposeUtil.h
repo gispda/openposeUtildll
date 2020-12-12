@@ -222,6 +222,8 @@ private:
 	void startOpenpose();
 	void runZed();
 
+	void Exitzed(bool& chrono_zed);
+
 	void findpose();
 
 	bool readImgRectFromText(int npos);
@@ -451,6 +453,10 @@ public:
 
 	bool saveposeavi();
 
+	bool appendonejson();
+
+	void writeJson();
+
 	void addmanpose();
 
 	//std::string startSavezedSvo();
@@ -495,6 +501,13 @@ public:
 		stdpose_avi_File = _poseavifile;
 
 	}
+	
+
+	void setpose_data_File(std::string _posedatafile)
+	{
+		stdpose_data_File = _posedatafile;
+	}
+
 	void setpose_data_Dir(std::string _posedatadir)
 	{
 		stdpose_data_Dir = _posedatadir;
@@ -537,6 +550,16 @@ public:
 
 
 	
+
+	std::string getpose_data_File()
+	{
+		if (stdpose_data_File.compare("") == 0)
+		{
+			stdpose_data_File = getNowTime() + ".json";
+		}
+
+		return stdpose_data_File;
+	}
 	std::string getpose_data_Dir()
 	{
 		if (stdpose_data_Dir.compare("") == 0)
@@ -587,9 +610,12 @@ protected:
 	std::string stdpose_avi_File;
 	std::string stdzed_avi_File;
 	std::string stdpose_data_Dir;
+	std::string stdpose_data_File;
 	std::string stdmerge_avi_File;
 
-	std::ofstream fout;
+	std::ofstream fout,ffout;
+
+	Json::Value totaljsons;
 
 	long  maxframecount;
 

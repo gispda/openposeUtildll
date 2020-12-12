@@ -43,6 +43,8 @@ struct AngleInfo {
 	//double anglexoy;
 	//double angleyoz;
 	//std::string  sdesc;
+
+	void init();
 };
 
 //struct JointPos {
@@ -68,7 +70,7 @@ public:
 	~manpose();
 
 
-
+	void init();
 	void configKeyData();
 	int getbody_part_index(string key, SecIdx secidx=FIRST_SEC_START);
 
@@ -76,11 +78,12 @@ public:
 
 	double twokneev;
 	double twoheelv;
+	int frameidx;
 	
 
 private:
-	cplane lrplane;
-	cplane bbplane;
+	//cplane lrplane;
+	//cplane bbplane;
 
 
 

@@ -6,6 +6,10 @@ manpose::manpose()
 {
 
 	//bodypartindexmap = nullptr;
+
+	twokneev = 0;
+	twoheelv = 0;
+	frameidx = -1;
 }
 
 
@@ -21,6 +25,46 @@ manpose::~manpose()
 	{
 		bodyjointposmap.clear();
 	}
+}
+
+void manpose::init()
+{
+
+	twokneev = 0;
+	twoheelv = 0;
+	frameidx = -1;
+
+
+	//ang_midhip_plane_normal.angle = NAN;
+	ang_anklebigtoe_kneeankle[0].init();
+	ang_anklebigtoe_kneeankle[1].init();
+
+	this->ang_anklebigtoe_plane_normal[0].init();
+	this->ang_anklebigtoe_plane_normal[1].init();
+
+
+	this->ang_heel_plane_normal[0].init();
+	this->ang_heel_plane_normal[1].init();
+
+	this->ang_hipknee_midhip[0].init();
+	this->ang_hipknee_midhip[1].init();
+
+	this->ang_hipknee_plane_normal[0].init();
+	this->ang_hipknee_plane_normal[1].init();
+
+	this->ang_kneeankle_hipknee[0].init();
+	this->ang_kneeankle_hipknee[1].init();
+
+	this->ang_kneeankle_plane_normal[0].init();
+	this->ang_kneeankle_plane_normal[1].init();
+
+
+	this->ang_midhip_plane_normal.init();
+
+	this->ang_plane1_left_right.init();
+
+	this->ang_plane2_before_after.init();
+	
 }
 
 void manpose::configKeyData()
@@ -379,4 +423,18 @@ void manpose::setang_heel_plane_normal(Angle _ang_heel_plane_normal, int _x, int
 		ang_heel_plane_normal[1].descxoy = " 平面角度";
 		ang_heel_plane_normal[1].descyoz = " 矢角度";
 	}
+}
+
+void AngleInfo::init()
+{
+	angle.angle = NAN;
+	angle.anglexoy = NAN;
+	angle.angleyoz = NAN;
+
+
+	desc = "";
+	pos = sl::float3{NAN,NAN,NAN};
+	descxoy = "";
+	descyoz = "";
+
 }

@@ -1415,6 +1415,444 @@ bool openposeUtil::saveposeavi()
 	return true;
 
 }
+bool openposeUtil::appendonejson()
+{
+	
+
+	Json::Value oneposes, bodypos, permpos, frame,framposidx;        // 根节点
+
+	//oneposes["id"] = getNowTime(); // 根节点下"name"对应的值"HaKing"
+	//root["age"] = 24;        // 根节点下"age"对应的值24
+
+	Json::Value array, arraypos, arraypos1;
+
+	Json::Value item, ItemPos, permitem;
+
+	AngleInfo angle;
+
+	//Json::Valu
+
+	angle = _manpose->getang_plane1_left_right();
+
+
+
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "NONE";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
+
+		array.append(item); // append()以数组的形式添加
+	}
+
+	//item["px"] = angle.pos.x;
+	//item["py"] = angle.pos.y;
+	//item["pz"] = angle.pos.z;
+
+
+
+	angle = _manpose->getang_plane2_before_after();
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "NONE";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
+
+		array.append(item); // append()以数组的形式添加
+	}
+
+
+	angle = _manpose->getang_midhip_plane_normal();
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "NONE";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
+
+		array.append(item); // append()以数组的形式添加
+	}
+	angle = _manpose->getang_hipknee_midhip(BODY_LEFT);
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "LEFT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
+
+		array.append(item); // append()以数组的形式添加
+	}
+	angle = _manpose->getang_hipknee_midhip(BODY_RIGHT);
+
+
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "RIGHT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
+
+		array.append(item); // append()以数组的形式添加
+	}
+	//----------------------------------------
+
+
+	angle = _manpose->getang_hipknee_plane_normal(BODY_LEFT);
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "LEFT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
+
+		array.append(item); // append()以数组的形式添加
+	}
+	angle = _manpose->getang_hipknee_plane_normal(BODY_RIGHT);
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "RIGHT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
+
+		array.append(item); // append()以数组的形式添加
+	}
+	//---------------------------------
+
+
+	angle = _manpose->getang_kneeankle_plane_normal(BODY_LEFT);
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "LEFT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
+
+		array.append(item); // append()以数组的形式添加
+	}
+	angle = _manpose->getang_kneeankle_plane_normal(BODY_RIGHT);
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "RIGHT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
+
+		array.append(item); // append()以数组的形式添加
+	}
+	//---------------------------------
+
+	angle = _manpose->getang_kneeankle_hipknee(BODY_LEFT);
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "LEFT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
+
+		array.append(item); // append()以数组的形式添加
+	}
+	angle = _manpose->getang_kneeankle_hipknee(BODY_RIGHT);
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "RIGHT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
+
+		array.append(item); // append()以数组的形式添加
+	}
+	//---------------------------------
+
+	angle = _manpose->getang_anklebigtoe_kneeankle(BODY_LEFT);
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "LEFT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
+
+		array.append(item); // append()以数组的形式添加
+	}
+	angle = _manpose->getang_anklebigtoe_kneeankle(BODY_RIGHT);
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "RIGHT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
+
+		array.append(item); // append()以数组的形式添加
+	}
+	//---------------------------------
+
+	angle = _manpose->getang_anklebigtoe_plane_normal(BODY_LEFT);
+
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "LEFT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
+
+		array.append(item); // append()以数组的形式添加
+	}
+	angle = _manpose->getang_anklebigtoe_plane_normal(BODY_RIGHT);
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "RIGHT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
+
+		array.append(item); // append()以数组的形式添加
+	}
+	//---------------------------------
+	//---------------------------------
+
+	angle = _manpose->getang_heel_plane_normal(BODY_LEFT);
+
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "LEFT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
+		//item["perm"] = angle.angle.angle/90;
+
+
+		array.append(item); // append()以数组的形式添加
+	}
+	angle = _manpose->getang_heel_plane_normal(BODY_RIGHT);
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		item["LEFTRIGHT"] = "RIGHT";
+		item["angle"] = angle.angle.angle;
+		item["anglexoy"] = angle.angle.anglexoy;
+		item["angleyoz"] = angle.angle.angleyoz;
+		item["x"] = angle.x;
+		item["y"] = angle.y;
+		item["desc"] = angle.desc;
+		item["descxoy"] = angle.descxoy;
+		item["descyoz"] = angle.descyoz;
+		//item["perm"] = angle.angle.angle / 90;
+
+		array.append(item); // append()以数组的形式添加
+	}
+
+
+	//---------------------------------
+
+
+
+
+
+
+	oneposes["bodypose"] = array;
+
+
+	///-----------------------------------------
+	angle = _manpose->getang_midhip_plane_normal();
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		permitem["headmidang"] = angle.angle.angle;
+		permitem["headmidangxoy"] = angle.angle.anglexoy;
+		permitem["headmidangyoz"] = angle.angle.angleyoz;
+
+	}
+
+
+	///---------
+	angle = _manpose->getang_kneeankle_hipknee(BODY_LEFT);
+
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		permitem["lefthipknee"] = angle.angle.angle;
+		permitem["lefthipkneexoy"] = angle.angle.anglexoy;
+		permitem["lefthipkneeyoz"] = angle.angle.angleyoz;
+		//item["p
+	}
+
+	angle = _manpose->getang_kneeankle_hipknee(BODY_RIGHT);
+
+
+	if (angle.angle.angle != NAN && angle.angle.angle != -NAN)
+	{
+		permitem["righthipknee"] = angle.angle.angle;
+
+		permitem["righthipkneexoy"] = angle.angle.anglexoy;
+		permitem["righthipkneeyoz"] = angle.angle.angleyoz;
+		//item["p
+	}
+	permitem["twoknee"] = _manpose->twokneev;
+	permitem["twoheelv"] = _manpose->twoheelv;
+	arraypos1.append(permitem);
+
+	permpos["perm"] = arraypos1;
+	////-------------------------------------------
+
+
+
+
+
+	/*std::vector<int> partsLink;
+	partsLink = {
+		0, 1, 1, 2, 2, 3, 3, 4, 1, 5, 5, 6, 6, 7, 1, 8, 8, 9, 8, 12, 12,
+		13, 13, 14, 14, 19, 19, 20, 14, 21, 8, 9, 9, 10, 10, 11, 11, 24,
+		11, 22, 22, 23, 0, 16, 0, 15, 15, 17, 16, 18
+	};*/
+
+	sl::double3 jointpos;
+	for (int part = 0; part < 25; part++) {
+
+
+		jointpos = _manpose->bodyjointposmap[part];
+
+		ItemPos["id"] = part;
+		ItemPos["x"] = jointpos.x;
+		ItemPos["y"] = jointpos.y;
+		ItemPos["z"] = jointpos.z;
+
+
+		arraypos.append(ItemPos); // append()以数组的形式添加
+		//if(isnan(jointpos.x) || isnan(jointpos.y) || isnan(jointpos.z))
+
+		//	v1 = keypoints_position[partsLink[part]];
+		//	v2 = keypoints_position[partsLink[part + 1]];
+
+		//	IsUseful(v1, v2, center_gravity);
+
+	}
+	bodypos["xyzpos"] = arraypos;
+	
+
+	framposidx["frameidx"] = _manpose->frameidx;
+
+	frame.append(framposidx);
+	frame.append(oneposes);
+	frame.append(bodypos);
+	frame.append(permpos);
+	
+	//totaljsons["frame"] = _manpose->frameidx;
+	totaljsons["people"].append(frame);
+
+	//Json::StreamWriterBuilder  builder;
+	//builder.settings_["emitUTF8"]= true;
+
+	
+
+	//writer->write(json_bodyls, &fout);
+
+	logInfo("append over one frame json data");
+}
+void openposeUtil::writeJson()
+{
+	std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
+
+	writer->write(totaljsons, &ffout);
+	ffout.close();
+}
 void openposeUtil::addmanpose()
 {
 
@@ -3004,6 +3442,7 @@ void openposeUtil::reinit()
 
 	jsonidx = 0;
 
+	totaljsons.clear();
 
 	//image_width = 1920;
 	//image_height = 1080;
@@ -3274,6 +3713,7 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 	std::vector<sl::float3> vertices;
 	std::vector<sl::float3> clr;
 
+	_manpose->init();
 	for (int person = 0; person < numberPeopleDetected; person++) {
 
 		std::map<int, sl::float4> keypoints_position; // 3D + score for each keypoints
@@ -4363,6 +4803,8 @@ void openposeUtil::runZed() {
 	cout << bshow << endl;
 
 	int endnum = 0;
+
+	
 	while (!quit) {
 		INIT_TIMER
 			try {
@@ -4544,7 +4986,9 @@ void openposeUtil::runZed() {
 
 
 							//cout << "write pose" << endl;
+							_manpose->frameidx = poseimgnum;
 							addmanpose();
+							appendonejson();
 							jsonidx++;
 							poseimgnum++;
 							//data_out_mtx.lock();
@@ -4559,13 +5003,7 @@ void openposeUtil::runZed() {
 							if (endnum >0)
 							{
 
-								destroyAllWindows();
-
-								if (chrono_zed) {
-									//STOP_TIMER("ZED")
-									chrono_zed = false;
-								}
-							 stopposeservice();
+								Exitzed(chrono_zed);
 
 							}
 
@@ -4635,24 +5073,45 @@ void openposeUtil::runZed() {
 		}
 		catch(std::exception ex)
 		{
+
+			cout <<"-------execption1----------"<< endl;
 			cout << ex.what() << endl;
 			logInfo(ex.what());
+
+			//Exitzed(chrono_zed);
 		}
 		catch (cv::Exception ex)
 		{
+			cout << "-------execption2----------" << endl;
 			cout << ex.what() << endl;
 			logInfo(ex.what());
+			//Exitzed(chrono_zed);
 		}
 		catch (runtime_error Runtime_error)
 		{
+			cout << "-------execption3----------" << endl;
 			cout << Runtime_error.what() << endl;
 
 			logInfo(Runtime_error.what());
+			//Exitzed(chrono_zed);
 		}
 		
 		//cout << "sleep 1 ms"<<endl;
 	}
 	destroyAllWindows();
+}
+
+void openposeUtil::Exitzed(bool& chrono_zed)
+{
+	if (!totaljsons.empty())
+		writeJson();
+	destroyAllWindows();
+
+	if (chrono_zed) {
+		//STOP_TIMER("ZED")
+		chrono_zed = false;
+	}
+	stopposeservice();
 }
 
 void openposeUtil::closezeddevice()
@@ -4711,6 +5170,9 @@ void openposeUtil::startposeservice(std::string svo_files, bool isshow, int x, i
 
 	logInfo(tmpdir);
 	setpose_data_Dir(tmpdir);
+
+
+	ffout.open(getpose_data_File().c_str(), std::ios::app);
 
 	//logInfo(ii);
 	//outputVideo = new VideoWriter(getpose_avi_File(), VideoWriter::fourcc('M','J','P','G'), 10, cv::Size(672, 376),true);

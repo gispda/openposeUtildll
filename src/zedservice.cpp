@@ -191,7 +191,7 @@ std::string zedservice::startposeservice(std::string svo_files, bool isshow,int 
 	resbuffer.append("#");
 	resbuffer.append(curdir).append("\\").append(zedservice::getCurZedservice()->getpose_avi_File());
 	resbuffer.append("#");
-	resbuffer.append(zedservice::getCurZedservice()->getpose_data_Dir());
+	resbuffer.append(zedservice::getCurZedservice()->getpose_data_File());
 	return resbuffer;
 
 
