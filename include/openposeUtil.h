@@ -38,6 +38,8 @@ using namespace std;
 
 #include "cvdrawtext.h"
 #include <json/json.h>
+#include <jointsFilter.hpp>
+
 
 #define ENABLE_FLOOR_PLANE_DETECTION 1 // Might be disable to use older ZED SDK
 
@@ -56,6 +58,13 @@ extern "C" void clean();
 
 typedef std::vector<std::string>  StringList;
 
+enum InputDataType {
+	WebCam = 0,
+	SVO = 1,
+	SVO_TXT = 2
+};
+
+
 class openposeUtil
 {
   
@@ -67,11 +76,18 @@ public:
 	void stopposeservice();
 
 private:
+	InputDataType m_inputDataType;
+
+
+	std::string m_svotxtDir;
     //  volatile bool stopped;
     int inputSourceWidth;
     int inputSourceHeight;
 
     sl::Mat currentFrame;
+
+
+
   //  QImage frame;
     //   QMutex stoppedMutex;
 //    QMutex updateMembersMutex;
@@ -164,7 +180,7 @@ private:
 
 	int poseimgidx;
 
-	int poseimgnum;
+	//int poseimgnum;
 	int zedimgnum;
 	int hkimgnum;
 	int jsonnum;
@@ -172,13 +188,27 @@ private:
 	bool isopen;
 
 	std::ifstream infile;
-	int ImgIdx;
+	//int ImgIdx;
 
+	int personIdx;
 
+	int svoTxtPos;
+
+	bool m_blastsvo;
+
+	std::map<int, string> m_svoimgmap;  //
+	std::map<int, int> m_svopersonmap;  //
+
+	jointsFilter manFilter;
+	bool m_bfilter;
+
+	void createSvodescmap();
+
+	void selectSvoPosAndSet();
 
 	StringList splitstr(const std::string& str, const std::string& pattern);
-	std::string getFilename(std::string fullfilename);
-	op::Rectangle<int> getRect(std::string linerect);
+	std::string getFilename(std::string fullfilename);    //废弃
+	op::Rectangle<int> getRect(std::string linerect);     
 	//op::PoseExtractorCaffe* poseExtractorCaffe;
 	//{ poseModel, FLAGS_openpose_root_dir + FLAGS_model_folder, FLAGS_num_gpu_start, {}, op::ScaleMode::ZeroToOne, 1 };
 
@@ -228,10 +258,11 @@ private:
 
 	bool readImgRectFromText(int npos);
 
+	void getPersonRect();
 
 	void drawText(cv::Mat* image,AngleInfo angle, Body body=BODY_RIGHT);
 
-	void drawText(cv::Mat* image, std::string _text, cv::Point origin);
+	void drawText(cv::Mat* image, std::string _text, cv::Point origin,int fonth=12,int cR=255,int cG=255,int cB=255);
 	void initDevice();
 	void ReInitResolution(Resolution _image_size);
 	void fill_people_ogl(op::Array<float>& poseKeypoints, sl::Mat& xyz);
@@ -419,8 +450,7 @@ public:
 	void startzedopenpose();
 
 
-	//同步运行zed和openpose
-	void runzedopenpose();
+
 
 	///一次采集
 	void startgetposeavidata();
@@ -619,7 +649,12 @@ protected:
 
 	long  maxframecount;
 
-	long jsonidx;
+	long m_svodescIdx;
+
+	
+
+	long m_svoImgIdx;
+
 //	PTMainWindow* pptmainwindow;
    
 //	QImage fromCvMat(cv::Mat cvimgmat);

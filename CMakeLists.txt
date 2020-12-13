@@ -215,7 +215,8 @@ target_sources(${PROJECT_NAME} PRIVATE
 	   ${CMAKE_CURRENT_SOURCE_DIR}/include/flags.hpp
 	   ${CMAKE_CURRENT_SOURCE_DIR}/include/zedservice.h
 	   ${CMAKE_CURRENT_SOURCE_DIR}/include/openposeUtil.h
-	   ${CMAKE_CURRENT_SOURCE_DIR}/include/KarmanFilter.hpp
+	   ${CMAKE_CURRENT_SOURCE_DIR}/include/KalmanFilter.hpp
+   	   ${CMAKE_CURRENT_SOURCE_DIR}/include/jointsFilter.hpp
 	   ${CMAKE_CURRENT_SOURCE_DIR}/include/utils.h
 	   ${CMAKE_CURRENT_SOURCE_DIR}/include/manpose.h
 	   ${CMAKE_CURRENT_SOURCE_DIR}/include/cline3d.h
