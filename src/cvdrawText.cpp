@@ -23,7 +23,7 @@ void cvdrawText::GetStringSize(HDC hDC, const char* str, int* w, int* h)
 
 }
 
-void cvdrawText::putTextZH(Mat& dst, const char* str, Point org, Scalar color, int fontSize, const char* fn, bool italic, bool underline)
+void cvdrawText::putTextZH(Mat& dst, const char* str, Point org, Scalar color, int fontSize, const char* fn, bool italic, bool underline, int fontweight)
 {
 
 	CV_Assert(dst.data != 0 && (dst.channels() == 1 || dst.channels() == 3));
@@ -38,9 +38,10 @@ void cvdrawText::putTextZH(Mat& dst, const char* str, Point org, Scalar color, i
 	lf.lfWidth = 0;
 	lf.lfEscapement = 0;
 	lf.lfOrientation = 0;
-	lf.lfWeight = 5;
+	lf.lfWeight = fontweight;
 	lf.lfItalic = italic;   //斜体
 	lf.lfUnderline = underline; //下划线
+	//lf.lfWeight 
 	lf.lfStrikeOut = 0;
 	lf.lfCharSet = DEFAULT_CHARSET;
 	lf.lfOutPrecision = 0;

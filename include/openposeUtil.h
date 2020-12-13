@@ -192,6 +192,8 @@ private:
 
 	int personIdx;
 
+	int aupersonidx;
+
 	int svoTxtPos;
 
 	bool m_blastsvo;
@@ -262,7 +264,7 @@ private:
 
 	void drawText(cv::Mat* image,AngleInfo angle, Body body=BODY_RIGHT);
 
-	void drawText(cv::Mat* image, std::string _text, cv::Point origin,int fonth=12,int cR=255,int cG=255,int cB=255);
+	void drawText(cv::Mat* image, std::string _text, cv::Point origin,int fonth=12,int cR=255,int cG=255,int cB=255,int fontweight =5);
 	void initDevice();
 	void ReInitResolution(Resolution _image_size);
 	void fill_people_ogl(op::Array<float>& poseKeypoints, sl::Mat& xyz);

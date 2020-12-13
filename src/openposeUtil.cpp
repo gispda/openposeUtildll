@@ -248,13 +248,15 @@ openposeUtil::openposeUtil()
 
 	svoTxtPos = 0;
 
-	m_svotxtDir = "D:\\project\\ParatroopersTraining\\data\\images3\\";
+	m_svotxtDir = "D:\\project\\ParatroopersTraining\\data\\images_12132323\\";
 
 	m_blastsvo = false;
 
 
 	personIdx = -1;
 
+
+	aupersonidx = 0;
 	if (m_inputDataType == InputDataType::SVO_TXT)
 	{
 		infile.open(m_svotxtDir+"filelist.txt", std::ifstream::in);
@@ -810,10 +812,10 @@ void openposeUtil::drawText(cv::Mat * image, AngleInfo angle, Body body)
 
 }
 
-void openposeUtil::drawText(cv::Mat * image, std::string _text, cv::Point origin, int fonth, int cR, int cG, int cB)
+void openposeUtil::drawText(cv::Mat * image, std::string _text, cv::Point origin, int fonth, int cR, int cG, int cB, int fontweight)
 {
 
-	cvdrawText::putTextZH(*image, _text.data(), origin, cv::Scalar(cR, cG, cB), fonth, "Arial", true, true);
+	cvdrawText::putTextZH(*image, _text.data(), origin, cv::Scalar(cR, cG, cB), fonth, "Arial", true, true, fontweight);
 }
 
 void openposeUtil::initDevice()
@@ -3472,6 +3474,8 @@ void openposeUtil::reinit()
 
 	personIdx = -1;
 
+
+	aupersonidx = 0;
 	//m_svoimgmap.clear();  //
 	//m_svopersonmap.clear();  //
 
@@ -3678,7 +3682,7 @@ void openposeUtil::getPersonRect()
 	cout << "start search use svoimgidx " << m_svoImgIdx << endl;
 
 	cout << "map size is " << m_svoimgmap.size()<<"map size 2 is "<< m_svopersonmap.size() << endl;
-
+	int temppersonidx = 0;
 
 	while (m_svodescIdx<= isvoidx)
 	{
@@ -3693,7 +3697,15 @@ void openposeUtil::getPersonRect()
 			{
 				filterRect = getRect(strRect);
 				cout << "filterRect " << filterRect.x << "," << filterRect.y << "," << filterRect.width << "," << filterRect.height << endl;
-				personIdx = m_svopersonmap[isvoidx];
+				temppersonidx = m_svopersonmap[isvoidx];
+
+				//aupersonidx
+				if (temppersonidx != personIdx)
+				{
+					personIdx = temppersonidx;
+					aupersonidx++;
+				}
+
 				m_svodescIdx = isvoidx;
 				return;
 			}
@@ -5083,8 +5095,8 @@ void openposeUtil::runZed() {
 							 ppv.x = filterRect.x;
 							 ppv.y = filterRect.y;
 							 std::string personstr;
-							 personstr.append("第").append(std::to_string(personIdx)).append("学员");
-							 drawText(&outputImage, personstr, ppv,20,0,0,255);
+							 personstr.append("第").append(std::to_string(aupersonidx)).append("学员");
+							 drawText(&outputImage, personstr, ppv,20,255,255,255,10);
 
 						  }
 						}
