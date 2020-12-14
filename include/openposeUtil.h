@@ -54,6 +54,8 @@ using namespace std;
 using namespace cv;
 using namespace sl;
 
+using namespace std;
+
 extern "C" void clean();
 
 typedef std::vector<std::string>  StringList;
@@ -71,6 +73,8 @@ class openposeUtil
 
 public:
 	openposeUtil();
+
+	void createFrameRectMap(int _framecount);
 	
     ~openposeUtil();
 	void stopposeservice();
@@ -200,6 +204,8 @@ private:
 
 	std::map<int, string> m_svoimgmap;  //
 	std::map<int, int> m_svopersonmap;  //
+	std::map<int, int> m_svotruepersonmap;
+	std::map<int, op::Rectangle<int>> m_svoRectmap;
 
 	jointsFilter manFilter;
 	bool m_bfilter;
@@ -259,6 +265,8 @@ private:
 	void findpose();
 
 	bool readImgRectFromText(int npos);
+
+	void insertOneRect(int nframe);
 
 	void getPersonRect();
 

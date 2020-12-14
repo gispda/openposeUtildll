@@ -257,9 +257,21 @@ openposeUtil::openposeUtil()
 
 
 	aupersonidx = 0;
+	
+
+	//ImgIdx = -1;
+
+	//testData(340);
+	//for(int i=0;i<897;i++)
+	//getFilterRect(i);
+	//testData(341);
+} // openposeUtil constructor
+
+void openposeUtil::createFrameRectMap(int framecount)
+{
 	if (m_inputDataType == InputDataType::SVO_TXT)
 	{
-		infile.open(m_svotxtDir+"filelist.txt", std::ifstream::in);
+		infile.open(m_svotxtDir + "filelist.txt", std::ifstream::in);
 
 		if (infile.is_open())
 		{
@@ -269,6 +281,22 @@ openposeUtil::openposeUtil()
 
 
 			createSvodescmap();
+
+			m_svoRectmap.clear();
+
+		
+
+
+			for (int ifidx = 0; ifidx < framecount; ifidx++)
+			{
+
+				
+				this->insertOneRect(ifidx);
+			  
+
+			}
+
+
 			for (auto& kv : m_svoimgmap) {
 				cout << kv.first << " has value " << kv.second << endl;
 
@@ -280,6 +308,21 @@ openposeUtil::openposeUtil()
 			}
 			cout << "----------------" << endl;
 
+			for (auto& kv : m_svoRectmap) {
+				cout << kv.first << " has value " << kv.second << endl;
+
+			}
+			cout << "----------------" << endl;
+			for (auto& kv : m_svotruepersonmap) {
+				cout << kv.first << " has value " << kv.second << endl;
+
+			}
+			cout << "----------------" << endl;
+
+
+
+
+
 			cout << "open filelist.txt okay" << endl;
 		}
 		else
@@ -288,14 +331,7 @@ openposeUtil::openposeUtil()
 			cout << "open filelist.txt error" << endl;
 		}
 	}
-
-	//ImgIdx = -1;
-
-	//testData(340);
-	//for(int i=0;i<897;i++)
-	//getFilterRect(i);
-	//testData(341);
-} // openposeUtil constructor
+}
 
 void openposeUtil::testData(int imgidx)
 {
@@ -505,6 +541,8 @@ openposeUtil::~openposeUtil()
 
 	m_svoimgmap.clear();  //
 	m_svopersonmap.clear();  //
+	m_svotruepersonmap.clear();
+	m_svoRectmap.clear();
 	stoppposewithexitsys();
 
 	SimLog::Instance().EndLog();
@@ -3112,24 +3150,60 @@ void openposeUtil::fillouterRect(cv::Mat& inputimg)
 	cout << "cut pic filterRect " << " " << filterRect.x << "," << filterRect.y << "," << filterRect.width << "," << filterRect.height << endl;
 
 
-	inx = filterRect.x;
-	iny = filterRect.y;
+	int npt[] = { 4 };
+	Point outrectpts[4][4];
+	outrectpts[0][0] = Point(0, 0);
+	outrectpts[0][1] = Point(poseImage_width, 0);
+	outrectpts[0][2] = Point(poseImage_width, filterRect.y);
+	outrectpts[0][3] = Point(0, filterRect.y);
 
-	rinx = filterRect.x + filterRect.width;
-	riny = filterRect.y + filterRect.height;
 
-	cv::Rect recttop(0,0, poseImage_width, filterRect.y);
+	const Point* ppt1[1] = { outrectpts[0] };
+
+
+	fillPoly(inputimg, ppt1, npt, 1, Scalar(0));
+
+
+	outrectpts[1][0] = Point(0, filterRect.y);
+	outrectpts[1][1] = Point(filterRect.x, filterRect.y);
+	outrectpts[1][2] = Point(filterRect.x, filterRect.y + filterRect.height);
+	outrectpts[1][3] = Point(0, filterRect.y + filterRect.height);
+
+	const Point* ppt2[1] = { outrectpts[1] };
+
+	fillPoly(inputimg, ppt2, npt, 1, Scalar(0));
+
+	outrectpts[2][0] = Point(0, filterRect.y + filterRect.height);
+	outrectpts[2][1] = Point(poseImage_width, filterRect.y + filterRect.height);
+	outrectpts[2][2] = Point(poseImage_width, poseImage_height);
+	outrectpts[2][3] = Point(0, poseImage_height);
+
+	const Point* ppt3[1] = { outrectpts[2] };
+
+	fillPoly(inputimg, ppt3, npt, 1, Scalar(0));
+
+
+	outrectpts[3][0] = Point(filterRect.x + filterRect.width, filterRect.y);
+	outrectpts[3][1] = Point(poseImage_width, filterRect.y);
+	outrectpts[3][2] = Point(poseImage_width, filterRect.y + filterRect.height);
+	outrectpts[3][3] = Point(filterRect.x + filterRect.width, filterRect.y + filterRect.height);
+
+	const Point* ppt4[1] = { outrectpts[3] };
+
+	fillPoly(inputimg, ppt4, npt, 1, Scalar(0));
+
+
+
+	//cv::imshow("1323", inputimg);
+	//waitKey(0);
+	/*cv::Rect recttop(0,0, poseImage_width, filterRect.y);
 
 	cv::Rect rectleft(0, filterRect.y, filterRect.x, filterRect.height);
 	cv::Rect rectbom(0, filterRect.y + filterRect.height, poseImage_width, poseImage_height - filterRect.y-filterRect.height);
 
 	cv::Rect rectright(filterRect.x+ filterRect.width, filterRect.y, poseImage_width - filterRect.x - filterRect.width, poseImage_height - filterRect.y - filterRect.height);
 	
-	/*outerrect[0] = recttop;
-	outerrect[1] = rectleft;
-	outerrect[2] = rectbom;
-	outerrect[3] = rectright;
-*/
+
 	cv::Mat dstImg = inputimg.clone();
 	cv::Mat zone1(recttop.height, recttop.width, CV_8UC3, Scalar(0));
 	cv::Mat tmpMat = dstImg(recttop);
@@ -3158,6 +3232,7 @@ void openposeUtil::fillouterRect(cv::Mat& inputimg)
 	inputimg = dstImg.clone();
 	//cv::imshow("1323", inputimg);
 	//waitKey(0);
+	*/
 
 }
 void openposeUtil::test1()
@@ -3661,6 +3736,63 @@ bool openposeUtil::readImgRectFromText(int npos)
 
 
 	return false;
+}
+
+void openposeUtil::insertOneRect(int nframe)
+{
+
+	int isvoidx = nframe;
+
+	int ic = 0;
+
+
+
+	std::string strRect = "";
+	cout << "start search use svoimgidx " << nframe << endl;
+
+	//cout << "map size is " << m_svoimgmap.size() << "map size 2 is " << m_svopersonmap.size() << endl;
+	int temppersonidx = 0;
+
+
+	op::Rectangle<int> _rect;
+	while (m_svodescIdx <= isvoidx)
+	{
+		try {
+
+			strRect = m_svoimgmap[isvoidx];
+			cout << "svodescidx " << m_svodescIdx << endl;
+			cout << "dyn svodescidx " << isvoidx << endl;
+
+			//cout << "file desc is " << strRect<<endl;
+			if (strRect.compare("") != 0)
+			{
+				_rect = getRect(strRect);
+				cout << "Img idx is " << nframe <<" filterRect " << _rect.x << "," << _rect.y << "," << _rect.width << "," << _rect.height << endl;
+				m_svoRectmap[nframe]=_rect;				
+				temppersonidx = m_svopersonmap[isvoidx];
+
+				//aupersonidx
+				if (temppersonidx != personIdx)
+				{
+					personIdx = temppersonidx;
+					aupersonidx++;
+				}
+				m_svotruepersonmap[nframe] = aupersonidx;
+
+				m_svodescIdx = isvoidx;
+				return;
+			}
+
+		}
+		catch (std::out_of_range & const e)
+		{
+			//std::cerr << e.what() << std::endl;
+			cout << "do not find svo desc item " << isvoidx << " frame" << endl;
+		}
+		isvoidx--;
+		//	ic++;		
+	}
+
 }
 
 void openposeUtil::getPersonRect()
@@ -4895,6 +5027,7 @@ void openposeUtil::runZed() {
 
 
 	//logInfo("zed frame is ");
+	int framecount = zed.getSVONumberOfFrames();
 	//logInfo(zed.getSVONumberOfFrames());
 	//int zzz = zed.getSVONumberOfFrames();
 	
@@ -4904,6 +5037,10 @@ void openposeUtil::runZed() {
 	int endnum = 0;
 
 	
+
+	createFrameRectMap(framecount);
+
+
 	while (!quit) {
 		INIT_TIMER
 			try {
@@ -4994,9 +5131,11 @@ void openposeUtil::runZed() {
 						{
 
 
-
-							getPersonRect();
-
+							filterRect = m_svoRectmap[m_svoImgIdx];
+							//cout << "1111111111111111111111111111111" << endl;
+							personIdx = m_svotruepersonmap[m_svoImgIdx];
+							//getPersonRect();
+							//cout << "2222222222222222222222222222" << endl;
 
 							fillouterRect(inputImage);
 
@@ -5260,6 +5399,11 @@ void openposeUtil::Exitzed(bool& chrono_zed)
 		}
 		m_svoimgmap.clear();  //
 		m_svopersonmap.clear();  //
+
+		m_svotruepersonmap.clear();
+
+		m_svoRectmap.clear();
+
 	}
 	if (!totaljsons.empty())
 		writeJson();
