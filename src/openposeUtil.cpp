@@ -296,7 +296,7 @@ void openposeUtil::createFrameRectMap(int framecount)
 
 			}
 
-
+			/*
 			for (auto& kv : m_svoimgmap) {
 				cout << kv.first << " has value " << kv.second << endl;
 
@@ -318,7 +318,7 @@ void openposeUtil::createFrameRectMap(int framecount)
 
 			}
 			cout << "----------------" << endl;
-
+			*/
 
 
 
@@ -798,7 +798,7 @@ void openposeUtil::initLogParameter(int argc, char* arcgv[])
 
 	//google::InitGoogleLogging(arcgv[0]);
 
-	FLAGS_log_dir = ".";
+	///FLAGS_log_dir = ".";
 
 	*arcgv = arcgv[0];
 	//LOG(INFO) << arcgv[0];
@@ -1705,6 +1705,7 @@ bool openposeUtil::appendonejson()
 	};*/
 
 	sl::double3 jointpos;
+	sl::uint2 joint2dpos;
 	for (int part = 0; part < 25; part++) {
 
 
@@ -1715,7 +1716,10 @@ bool openposeUtil::appendonejson()
 		ItemPos["y"] = jointpos.y;
 		ItemPos["z"] = jointpos.z;
 
+		joint2dpos = _manpose->jointsposmap2d[part];
 
+		ItemPos["cx"] = joint2dpos.x;
+		ItemPos["cy"] = joint2dpos.y;
 		arraypos.append(ItemPos); // append()以数组的形式添加
 		//if(isnan(jointpos.x) || isnan(jointpos.y) || isnan(jointpos.z))
 
@@ -3760,8 +3764,8 @@ void openposeUtil::insertOneRect(int nframe)
 		try {
 
 			strRect = m_svoimgmap[isvoidx];
-			cout << "svodescidx " << m_svodescIdx << endl;
-			cout << "dyn svodescidx " << isvoidx << endl;
+		//	cout << "svodescidx " << m_svodescIdx << endl;
+		//	cout << "dyn svodescidx " << isvoidx << endl;
 
 			//cout << "file desc is " << strRect<<endl;
 			if (strRect.compare("") != 0)
@@ -3787,7 +3791,7 @@ void openposeUtil::insertOneRect(int nframe)
 		catch (std::out_of_range & const e)
 		{
 			//std::cerr << e.what() << std::endl;
-			cout << "do not find svo desc item " << isvoidx << " frame" << endl;
+			///cout << "do not find svo desc item " << isvoidx << " frame" << endl;
 		}
 		isvoidx--;
 		//	ic++;		
@@ -4488,10 +4492,12 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 
 		sl::double3 jointpos;
 		sl::float4 jointtemp;
+		sl::uint2 joint2dtemp = sl::uint2(NAN,NAN);
+
 
 		sl::float4 v10=sl::float4(NAN, NAN, NAN, 0), v13= sl::float4(NAN, NAN, NAN, 0);
 		sl::float4 v21 = sl::float4(NAN, NAN, NAN, 0), v24 = sl::float4(NAN, NAN, NAN, 0);
-
+		_manpose->jointsposmap2d.clear();
 		for (int part = 0; part < poseKeypoints.getSize(1); part++)
 		{
 
@@ -4499,7 +4505,11 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 			logInfo(part);
 
 			jointtemp = keypoints_position[part];
+			joint2dtemp.x = poseKeypoints[{0, part, 0}];
+			joint2dtemp.y = poseKeypoints[{0, part, 1}];
 
+			_manpose->jointsposmap2d[part].x = joint2dtemp.x;
+			_manpose->jointsposmap2d[part].y = joint2dtemp.y;
 			jointpos.x = jointtemp.x;
 			jointpos.y = jointtemp.y;
 			jointpos.z = jointtemp.z;
@@ -4512,10 +4522,17 @@ void openposeUtil::calcmanpose(op::Array<float> & poseKeypoints, sl::Mat & xyz)
 			else if (part == 24)
 				v24 = jointtemp;
 
-			_manpose->bodyjointposmap.insert(make_pair(part, jointpos));
+			_manpose->bodyjointposmap[part] = jointpos;
+			cout << "++++++++++++++++++part is " <<part<< endl;
+			cout << _manpose->jointsposmap2d[part].x <<","<< _manpose->jointsposmap2d[part].y << endl;
+			cout << "*****************************" << endl;
 
+
+			joint2dtemp = sl::uint2(NAN,NAN);
 		}
-
+		cout << "-----------------" << endl;
+		cout << poseKeypoints.toString() << endl;
+		cout << "-----------------" << endl;
 		if (isnan(v10.x) || isnan(v10.y) || isnan(v10.z) || isnan(v13.x) || isnan(v13.y) || isnan(v13.z))
 		{
 			_manpose->twokneev = -1;
@@ -5139,8 +5156,11 @@ void openposeUtil::runZed() {
 
 							fillouterRect(inputImage);
 
+							//cv::imshow("Input", inputImage);
+
+							//sl::sleep_ms(1);
 						}
-					//	cout << "2222222222222222222222222222" << endl;
+						//cout << "2222222222222222222222222222" << endl;
 						data_in_mtx.lock();
 						netInputArray = cvMatToOpInput.createArray(op::Matrix(&inputImage), scaleInputToNetInputs, netInputSizes);
 						///if (bzero == true)
@@ -5234,7 +5254,7 @@ void openposeUtil::runZed() {
 							 ppv.x = filterRect.x;
 							 ppv.y = filterRect.y;
 							 std::string personstr;
-							 personstr.append("第").append(std::to_string(aupersonidx)).append("学员");
+							 personstr.append("第").append(std::to_string(m_svotruepersonmap[m_svoImgIdx])).append("学员");
 							 drawText(&outputImage, personstr, ppv,20,255,255,255,10);
 
 						  }

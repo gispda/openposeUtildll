@@ -25,6 +25,13 @@ manpose::~manpose()
 	{
 		bodyjointposmap.clear();
 	}
+	if (!jointsposmap2d.empty())
+	{
+		jointsposmap2d.clear();
+	}
+	
+
+
 }
 
 void manpose::init()
@@ -33,7 +40,7 @@ void manpose::init()
 	twokneev = 0;
 	twoheelv = 0;
 	frameidx = -1;
-
+	
 
 	//ang_midhip_plane_normal.angle = NAN;
 	ang_anklebigtoe_kneeankle[0].init();

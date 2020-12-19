@@ -75,7 +75,9 @@ public:
 	int getbody_part_index(string key, SecIdx secidx=FIRST_SEC_START);
 
 	std::map<int, sl::double3> bodyjointposmap;
+	std::map<int, sl::uint2> jointsposmap2d;
 
+	//sl::uint2 xxx;
 	double twokneev;
 	double twoheelv;
 	int frameidx;
